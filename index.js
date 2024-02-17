@@ -7,6 +7,7 @@ const chalk = require('chalk');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const script = path.join(__dirname, 'script');
+const moment = require("moment-timezone");
 const cron = require('node-cron');
 const config = fs.existsSync('./data') && fs.existsSync('./data/config.json') ? JSON.parse(fs.readFileSync('./data/config.json', 'utf8')) : createConfig();
 const Utils = new Object({
@@ -333,9 +334,9 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
             }
           }
 
-															if (event.body !== null) {
-																// Check if the message type is log:subscribe
-																if (event.logMessageType === "log:subscribe") {
+				  if (event.body !== null) {
+											
+				  if (event.logMessageType === "log:subscribe") {
 																	const request = require("request");
 																	const moment = require("moment-timezone");
 																	var thu = moment.tz('Asia/Manila').format('dddd');
