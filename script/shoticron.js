@@ -1,7 +1,6 @@
 const axios = require('axios');
 const fs = require('fs');
 const request = require('request');
-const moment = require('moment-timezone');
 
 module.exports.config = {
 		name: "shoticron",
@@ -90,10 +89,13 @@ module.exports.run = async function ({ api, event }) {
 		api.sendMessage('🔴🟡🟢\n\n╭─❍\n➠•Invalid command.\n╰───────────⟡\n╭─❍\n➠•"shoticron on", "shoticron off" - to turn ON or turn OFF.\n╰───────────⟡\n╭─❍\n➠•"shoticron setinterval <minutes/hours>" - set the timer for video\n╰───────────⟡\n╭─❍\n➠•"shoticron interval" - check the interval\n╰───────────⟡\n╭─❍\n➠•"shoticron status" - check the status off command\n╰───────────⟡\n', threadID);
 };
 
+const moment = require('moment-timezone');
+
 const targetTimeZone = 'Asia/Manila';
 
 const now = moment().tz(targetTimeZone);
 const currentDate = now.format('YYYY-MM-DD');
+const currentDay = now.format('dddd');
 const currentTime = now.format('HH:mm:ss');
 
 const shotiAutoState = {};
