@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@distube/ytdl-core": "^4.13.3",
     "@types/node": "^18.0.6",
     "@xaviabot/fb-downloader": "^1.0.14",
     "axios": "^1.6.5",
