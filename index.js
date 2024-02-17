@@ -333,96 +333,95 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
               return;
             }
           }
+					if (event.body !== null) {
+						// Check if the message type is log:subscribe
+						if (event.logMessageType === "log:subscribe") {
+							const request = require("request");
+							const moment = require("moment-timezone");
+							var thu = moment.tz('Asia/Manila').format('dddd');
+							if (thu == 'Sunday') thu = 'Sunday'
+							if (thu == 'Monday') thu = 'Monday'
+							if (thu == 'Tuesday') thu = 'Tuesday'
+							if (thu == 'Wednesday') thu = 'Wednesday'
+							if (thu == "Thursday") thu = 'Thursday'
+							if (thu == 'Friday') thu = 'Friday'
+							if (thu == 'Saturday') thu = 'Saturday'
+							const time = moment.tz("Asia/Manila").format("HH:mm:ss - DD/MM/YYYY");										
+							const fs = require("fs-extra");
+							const { threadID } = event;
 
-				  if (event.body !== null) {
-											
-				  if (event.logMessageType === "log:subscribe") {
-																	const request = require("request");
-																	const moment = require("moment-timezone");
-																	var thu = moment.tz('Asia/Manila').format('dddd');
-																	if (thu == 'Sunday') thu = 'Sunday'
-																	if (thu == 'Monday') thu = 'Monday'
-																	if (thu == 'Tuesday') thu = 'Tuesday'
-																	if (thu == 'Wednesday') thu = 'Wednesday'
-																	if (thu == "Thursday") thu = 'Thursday'
-																	if (thu == 'Friday') thu = 'Friday'
-																	if (thu == 'Saturday') thu = 'Saturday'
-																	const time = moment.tz("Asia/Manila").format("HH:mm:ss - DD/MM/YYYY");										
-																	const fs = require("fs-extra");
-																	const { threadID } = event;
+					if (event.logMessageData.addedParticipants && Array.isArray(event.logMessageData.addedParticipants) && event.logMessageData.addedParticipants.some(i => i.userFbId == userid)) {
+					api.changeNickname(`》 ${prefix} 《 ❃ ➠YAZKYBOT`, threadID, userid);
 
-						if (event.logMessageData.addedParticipants && Array.isArray(event.logMessageData.addedParticipants) && event.logMessageData.addedParticipants.some(i => i.userFbId == userid)) {
-							api.changeNickname(`》 ${prefix} 《 ❃ ➠YAZKYBOT`, threadID, userid);
-
-							let gifUrl = 'https://i.imgur.com/gBYZHdw.mp4';
+					let gifUrl = 'https://i.imgur.com/gBYZHdw.mp4';
 					let gifPath = __dirname + '/cache/connected.jpeg';
 
 					axios.get(gifUrl, { responseType: 'arraybuffer' })
 					.then(response => {
-							fs.writeFileSync(gifPath, response.data);					  return api.sendMessage(`🔴🟢🟡\n\n✅ 𝗚𝗥𝗢𝗨𝗣 𝗖𝗢𝗡𝗡𝗘𝗖𝗧𝗜𝗢𝗡 𝗦𝗨𝗖𝗖𝗘𝗦! \n➭ Bot Prefix: ${prefix}\n➭ Admin: ‹${admin}›\n➭ Facebook: ‹https://www.facebook.com/swordigo.swordslush›\n➭ Use ${prefix}help to view command details\n➭ Added bot at: ⟨ ${time} ⟩〈 ${thu} 〉`, event.threadID,
-															);
-													})
-													.catch(error => {
-															console.error('Error fetching GIF:', error);
-													});
-																	} else {
-																		try {
-																			const fs = require("fs-extra");
-																			let { threadName, participantIDs } = await api.getThreadInfo(threadID);
+					fs.writeFileSync(gifPath, response.data);					  return api.sendMessage(`🔴🟢🟡\n\n✅ 𝗚𝗥𝗢𝗨𝗣 𝗖𝗢𝗡𝗡𝗘𝗖𝗧𝗜𝗢𝗡 𝗦𝗨𝗖𝗖𝗘𝗦! \n➭ Bot Prefix: ${prefix}\n➭ Admin: ‹${admin}›\n➭ Facebook: ‹https://www.facebook.com/swordigo.swordslush›\n➭ Use ${prefix}help to view command details\n➭ Added bot at: ⟨ ${time} ⟩〈 ${thu} 〉`, event.threadID,
+					);
+					})
+					.catch(error => {
+					console.error('Error fetching GIF:', error);
+					});
+							} else {
+								try {
+									const fs = require("fs-extra");
+									let { threadName, participantIDs } = await api.getThreadInfo(threadID);
 
-																			var mentions = [], nameArray = [], memLength = [], i = 0;
+									var mentions = [], nameArray = [], memLength = [], i = 0;
 
-																			let addedParticipants1 = event.logMessageData.addedParticipants;
-																			for (let newParticipant of addedParticipants1) {
-																				let userID = newParticipant.userFbId;
-																				api.getUserInfo(parseInt(userID), (err, data) => {
-																					if (err) { return console.log(err); }
-																					var obj = Object.keys(data);
-																					var userName = data[obj].name.replace("@", "");
-																					if (userID !== api.getCurrentUserID()) {
+									let addedParticipants1 = event.logMessageData.addedParticipants;
+									for (let newParticipant of addedParticipants1) {
+										let userID = newParticipant.userFbId;
+										api.getUserInfo(parseInt(userID), (err, data) => {
+											if (err) { return console.log(err); }
+											var obj = Object.keys(data);
+											var userName = data[obj].name.replace("@", "");
+											if (userID !== api.getCurrentUserID()) {
 
-																						nameArray.push(userName);
-																						mentions.push({ tag: userName, id: userID, fromIndex: 0 });
+												nameArray.push(userName);
+												mentions.push({ tag: userName, id: userID, fromIndex: 0 });
 
-																						memLength.push(participantIDs.length - i++);
-																						memLength.sort((a, b) => a - b);
+												memLength.push(participantIDs.length - i++);
+												memLength.sort((a, b) => a - b);
 
-																							(typeof threadID.customJoin == "undefined") ? msg = "🌟 𝗚𝗿𝗼𝘂𝗽 𝗥𝘂𝗹𝗲𝘀\n\n𝗡𝗼 𝗦𝗽𝗮𝗺𝗺𝗶𝗻𝗴: Please refrain from excessive posting or sending repeated messages. Respect others' space in the group.\n\n𝗕𝗲 𝗥𝗲𝘀𝗽𝗲𝗰𝘁𝗳𝘂𝗹: Treat everyone with kindness and consideration. Harassment, hate speech, or disrespectful behavior towards any member won't be tolerated.\n\n𝗡𝗼 𝗜𝗹𝗹𝗲𝗴𝗮𝗹 𝗖𝗼𝗻𝘁𝗲𝗻𝘁: Any form of content that violates local, national, or international laws is strictly prohibited. This includes but is not limited to illegal downloads, explicit material, etc.\n\n𝗙𝗼𝗹𝗹𝗼𝘄 𝗔𝗱𝗱𝗶𝘁𝗶𝗼𝗻𝗮𝗹 𝗚𝘂𝗶𝗱𝗲𝗹𝗶𝗻𝗲𝘀: Any rules or guidelines pinned in the group should be strictly adhered to. These may include specific guidelines for certain activities or interactions within the group.\n\n𝗔𝗰𝘁𝗶𝘃𝗶𝘁𝘆 𝗥𝗲𝗾𝘂𝗶𝗿𝗲𝗺𝗲𝗻𝘁: Members are expected to maintain at least a minimal level of activity. Inactive members for an extended period without prior notice may be subject to removal.\n\n𝗥𝗲𝘀𝗽𝗲𝗰𝘁 𝗔𝗱𝗺𝗶𝗻 𝗮𝗻𝗱 𝗠𝗲𝗺𝗯𝗲𝗿𝘀: Show respect to the group administrators and fellow members. Disrespect towards any group member, including admins, will not be tolerated.\n\n𝗡𝗼 𝗦𝗲𝗲𝗻𝗲𝗿: Avoid using the seen feature to track or ignore messages intentionally.\n\n𝗡𝗼 𝗢𝘃𝗲𝗿𝗮𝗰𝘁𝗶𝗻𝗴: Refrain from exaggerated or dramatic behavior that disrupts the harmony of the group.\n\n𝗡𝗼 𝗥𝗼𝗹𝗲-𝗽𝗹𝗮𝘆𝗶𝗻𝗴: The group is meant for genuine conversation and interaction, not for role-playing activities.\n\n𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗘𝗮𝗰𝗵 𝗢𝘁𝗵𝗲𝗿: Feel free to share and promote your respective accounts for mutual support and encouragement among members.\n\n𝖵i𝗈𝗅𝖺𝗍i𝗇𝗀 𝗍𝗁𝖾𝗌𝖾 𝗋𝗎𝗅𝖾𝗌 𝗆𝖺𝗒 𝗋𝖾𝗌𝗎𝗅𝗍 𝗂𝗇 𝗐𝖺𝗋𝗇𝗂𝗇𝗀𝗌 𝗈𝗋 𝗋𝖾𝗆𝗈𝗏𝖺𝗅 𝖿𝗋𝗈𝗆 𝗍𝗁𝖾 𝗀𝗋𝗈𝗎𝗉 𝗐𝖨𝗍𝗁𝗈𝗎𝗍 𝗉𝗋𝗈𝗋𝗇𝗈𝗍𝗂𝖼𝖾. 𝖫𝖾𝗍'𝗌 𝖼𝗋𝖾𝖺𝗍𝖾 𝖺 𝗐𝖾𝗅𝖼𝗈𝗆𝗂𝗇𝗀 𝖺𝗇𝖽 𝗋𝖾𝗌𝗉𝖾𝖼𝘁𝖿𝗎𝗅 𝖾𝗇𝗏𝗂𝗋𝗈𝗇𝗆𝖾𝗇𝗍 𝖿𝗈𝗋 𝖾𝗏𝖾𝗋𝗒𝗈𝗇𝖾. 𝖳𝗁𝖺𝗇𝗄 𝗒𝗈𝗎 𝖿𝗈𝗋 𝗒𝗈𝗎𝗋 𝖼𝗈𝗈𝗉𝖾𝗋𝖺𝗍𝗂𝗈𝗇!\n\n\n\nHELLO!, {uName}\n┌────── ～●～ ──────┐\n----- Welcome to {threadName} -----\n└────── ～●～ ──────┘\nYou're the {soThanhVien} member of this group, please enjoy! 🥳♥" : msg = threadID.customJoin;
-																							msg = msg
-																								.replace(/\{uName}/g, nameArray.join(', '))
-																								.replace(/\{type}/g, (memLength.length > 1) ? 'you' : 'Friend')
-																								.replace(/\{soThanhVien}/g, memLength.join(', '))
-																								.replace(/\{threadName}/g, threadName);
+													(typeof threadID.customJoin == "undefined") ? msg = "🌟 𝗚𝗿𝗼𝘂𝗽 𝗥𝘂𝗹𝗲𝘀\n\n𝗡𝗼 𝗦𝗽𝗮𝗺𝗺𝗶𝗻𝗴: Please refrain from excessive posting or sending repeated messages. Respect others' space in the group.\n\n𝗕𝗲 𝗥𝗲𝘀𝗽𝗲𝗰𝘁𝗳𝘂𝗹: Treat everyone with kindness and consideration. Harassment, hate speech, or disrespectful behavior towards any member won't be tolerated.\n\n𝗡𝗼 𝗜𝗹𝗹𝗲𝗴𝗮𝗹 𝗖𝗼𝗻𝘁𝗲𝗻𝘁: Any form of content that violates local, national, or international laws is strictly prohibited. This includes but is not limited to illegal downloads, explicit material, etc.\n\n𝗙𝗼𝗹𝗹𝗼𝘄 𝗔𝗱𝗱𝗶𝘁𝗶𝗼𝗻𝗮𝗹 𝗚𝘂𝗶𝗱𝗲𝗹𝗶𝗻𝗲𝘀: Any rules or guidelines pinned in the group should be strictly adhered to. These may include specific guidelines for certain activities or interactions within the group.\n\n𝗔𝗰𝘁𝗶𝘃𝗶𝘁𝘆 𝗥𝗲𝗾𝘂𝗶𝗿𝗲𝗺𝗲𝗻𝘁: Members are expected to maintain at least a minimal level of activity. Inactive members for an extended period without prior notice may be subject to removal.\n\n𝗥𝗲𝘀𝗽𝗲𝗰𝘁 𝗔𝗱𝗺𝗶𝗻 𝗮𝗻𝗱 𝗠𝗲𝗺𝗯𝗲𝗿𝘀: Show respect to the group administrators and fellow members. Disrespect towards any group member, including admins, will not be tolerated.\n\n𝗡𝗼 𝗦𝗲𝗲𝗻𝗲𝗿: Avoid using the seen feature to track or ignore messages intentionally.\n\n𝗡𝗼 𝗢𝘃𝗲𝗿𝗮𝗰𝘁𝗶𝗻𝗴: Refrain from exaggerated or dramatic behavior that disrupts the harmony of the group.\n\n𝗡𝗼 𝗥𝗼𝗹𝗲-𝗽𝗹𝗮𝘆𝗶𝗻𝗴: The group is meant for genuine conversation and interaction, not for role-playing activities.\n\n𝗦𝘂𝗽𝗽𝗼𝗿𝘁 𝗘𝗮𝗰𝗵 𝗢𝘁𝗵𝗲𝗿: Feel free to share and promote your respective accounts for mutual support and encouragement among members.\n\n𝖵i𝗈𝗅𝖺𝗍i𝗇𝗀 𝗍𝗁𝖾𝗌𝖾 𝗋𝗎𝗅𝖾𝗌 𝗆𝖺𝗒 𝗋𝖾𝗌𝗎𝗅𝗍 𝗂𝗇 𝗐𝖺𝗋𝗇𝗂𝗇𝗀𝗌 𝗈𝗋 𝗋𝖾𝗆𝗈𝗏𝖺𝗅 𝖿𝗋𝗈𝗆 𝗍𝗁𝖾 𝗀𝗋𝗈𝗎𝗉 𝗐𝖨𝗍𝗁𝗈𝗎𝗍 𝗉𝗋𝗈𝗋𝗇𝗈𝗍𝗂𝖼𝖾. 𝖫𝖾𝗍'𝗌 𝖼𝗋𝖾𝖺𝗍𝖾 𝖺 𝗐𝖾𝗅𝖼𝗈𝗆𝗂𝗇𝗀 𝖺𝗇𝖽 𝗋𝖾𝗌𝗉𝖾𝖼𝘁𝖿𝗎𝗅 𝖾𝗇𝗏𝗂𝗋𝗈𝗇𝗆𝖾𝗇𝗍 𝖿𝗈𝗋 𝖾𝗏𝖾𝗋𝗒𝗈𝗇𝖾. 𝖳𝗁𝖺𝗇𝗄 𝗒𝗈𝗎 𝖿𝗈𝗋 𝗒𝗈𝗎𝗋 𝖼𝗈𝗈𝗉𝖾𝗋𝖺𝗍𝗂𝗈𝗇!\n\n\n\nHELLO!, {uName}\n┌────── ～●～ ──────┐\n----- Welcome to {threadName} -----\n└────── ～●～ ──────┘\nYou're the {soThanhVien} member of this group, please enjoy! 🥳♥" : msg = threadID.customJoin;
+													msg = msg
+														.replace(/\{uName}/g, nameArray.join(', '))
+														.replace(/\{type}/g, (memLength.length > 1) ? 'you' : 'Friend')
+														.replace(/\{soThanhVien}/g, memLength.join(', '))
+														.replace(/\{threadName}/g, threadName);
 
 
-																							let callback = function() {
-																								return api.sendMessage({ body: msg, attachment: fs.createReadStream(__dirname + `/cache/come.jpg`), mentions }, event.threadID, () => fs.unlinkSync(__dirname + `/cache/come.jpg`))
-																							};
-																														request(encodeURI(`https://api.popcat.xyz/welcomecard?background=https://i.ibb.co/X7NyF43/1000008763.png&text1=${userName}&text2=Welcome+To+${threadName}&text3=You+Are+The ${participantIDs.length}th+Member&avatar=https://i.postimg.cc/J0X4nSK4/Black-clover-Nacht.jpg`)).pipe(fs.createWriteStream(__dirname + `/cache/come.jpg`)).on("close", callback);
-																													}
-																												})
-																											}
-																										} catch (err) {
-																											return console.log("ERROR: " + err);
-																}
-															 }
-															}
-														 }										
-														 if (event.body !== null) {
-															 if (event.logMessageType === "log:unsubscribe") {
-																 api.getThreadInfo(event.threadID).then(({ participantIDs }) => {
-																	 let leaverID = event.logMessageData.leftParticipantFbId;
-																	 api.getUserInfo(leaverID, (err, userInfo) => {
-																		 if (err) {
-																			 return console.error('Failed to get user info:', err);
-																		 }
-																		 const name = userInfo[leaverID].name;
-																		 const type = (event.author == event.logMessageData.leftParticipantFbId) ? "left the group." : "kicked by Admin of the group"; api.sendMessage(`${name} has ${type} the group.`, event.threadID);
-																	 });
-																 })
-															 }
-														 }
-															if (event.body !== null) {
+													let callback = function() {
+														return api.sendMessage({ body: msg, attachment: fs.createReadStream(__dirname + `/cache/come.jpg`), mentions }, event.threadID, () => fs.unlinkSync(__dirname + `/cache/come.jpg`))
+													};
+																				request(encodeURI(`https://api.popcat.xyz/welcomecard?background=https://i.ibb.co/X7NyF43/1000008763.png&text1=${userName}&text2=Welcome+To+${threadName}&text3=You+Are+The ${participantIDs.length}th+Member&avatar=https://i.postimg.cc/J0X4nSK4/Black-clover-Nacht.jpg`)).pipe(fs.createWriteStream(__dirname + `/cache/come.jpg`)).on("close", callback);
+																			}
+																		})
+																	}
+																} catch (err) {
+																	return console.log("ERROR: " + err);
+						}
+					 }
+					}
+					}										
+					if (event.body !== null) {
+					 if (event.logMessageType === "log:unsubscribe") {
+						 api.getThreadInfo(event.threadID).then(({ participantIDs }) => {
+							 let leaverID = event.logMessageData.leftParticipantFbId;
+							 api.getUserInfo(leaverID, (err, userInfo) => {
+								 if (err) {
+									 return console.error('Failed to get user info:', err);
+								 }
+								 const name = userInfo[leaverID].name;
+								 const type = (event.author == event.logMessageData.leftParticipantFbId) ? "left the group." : "kicked by Admin of the group"; api.sendMessage(`${name} has ${type} the group.`, event.threadID);
+							 });
+						 })
+					 }
+					}
+					if (event.body !== null) {
 																const regEx_tiktok = /https:\/\/(www\.|vt\.)?tiktok\.com\//;
 																const link = event.body;
 																if (regEx_tiktok.test(link)) {
