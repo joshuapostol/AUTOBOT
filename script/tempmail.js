@@ -14,7 +14,7 @@ function generateRandomId() {
 
 module.exports.config = {
 		name: "tempm",
-		role: 0,
+		role: 2,
 		credits: "Deku",
 		description: "Generate temporary email (auto get inbox)",
 		usages: "[tempmail]",
