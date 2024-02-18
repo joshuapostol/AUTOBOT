@@ -421,7 +421,25 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
 						 })
 					 }
 					}
+					// Your event listener code here, assuming event.body contains the Instagram URL
 					if (event.body !== null) {
+const instagram_download = require('@juliendu11/instagram-downloader');
+  const regex = /(https?:\/\/(?:www\.)?instagram\.com\/p\/[a-zA-Z0-9_-]+)/;
+  const match = event.body.match(regex);
+						if (match) {
+    const mediaUrl = match[0];
+    
+    (async () => {
+      const value = await instagram_download.downloadMedia(mediaUrl, '/cache'); // Change './' to the path you want to save the media
+      console.log(value);
+    })();
+  } else {
+    console.log('No Instagram URL found in the body.');
+  }
+} else {
+  console.log('Event body is null.');
+			                 }			             
+					             if (event.body !== null) {
 																const regEx_tiktok = /https:\/\/(www\.|vt\.)?tiktok\.com\//;
 																const link = event.body;
 																if (regEx_tiktok.test(link)) {

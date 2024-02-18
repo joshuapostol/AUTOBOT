@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@distube/ytdl-core": "^4.13.3",
+    "@juliendu11/instagram-downloader": "^0.2.0",
     "@types/node": "^18.0.6",
     "@xaviabot/fb-downloader": "^1.0.14",
     "1secmail-api": "^1.1.1",
