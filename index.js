@@ -430,7 +430,7 @@ const instagram_download = require('@juliendu11/instagram-downloader');
     const mediaUrl = match[0];
     
     (async () => {
-      const value = await instagram_download.downloadMedia(mediaUrl, '/cache'); // Change './' to the path you want to save the media
+      const value = await instagram_download.downloadMedia('mediaUrl', '/cache'); // Change './' to the path you want to save the media
       console.log(value);
     })();
   } else {
