@@ -422,24 +422,27 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
 					 }
 					}
 					// Your event listener code here, assuming event.body contains the Instagram URL
-					if (event.body !== null) {
-const instagram_download = require('@juliendu11/instagram-downloader');
+         if (event.body !== null) {
   const regex = /(https?:\/\/(?:www\.)?instagram\.com\/p\/[a-zA-Z0-9_-]+)/;
   const match = event.body.match(regex);
-						if (match) {
+  
+  if (match) {
     const mediaUrl = match[0];
     
     (async () => {
-      const value = await instagram_download.downloadMedia('mediaUrl', '/cache'); // Change './' to the path you want to save the media
+      const value = await instagram_download.downloadMedia(mediaUrl, 'cache'); // Change './' to the path you want to save the media
       console.log(value);
+      api.sendMessage({ body: "𝖠𝗎𝗍𝗈 𝖣𝗈𝗐𝗇 Instagram", mediaUrl }); // Modify this line to fit your API's sendMessage method
     })();
   } else {
     console.log('No Instagram URL found in the body.');
+    api.sendMessage({ body: "No Instagram URL found in the body." }); // Modify this line to fit your API's sendMessage method
   }
 } else {
   console.log('Event body is null.');
-			                 }			             
-					             if (event.body !== null) {
+  api.sendMessage({ body: "Event body is null." }); // Modify this line to fit your API's sendMessage method
+}             
+if (event.body !== null) {
 																const regEx_tiktok = /https:\/\/(www\.|vt\.)?tiktok\.com\//;
 																const link = event.body;
 																if (regEx_tiktok.test(link)) {
