@@ -423,22 +423,29 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
 					}
 					// Your event listener code here, assuming event.body contains the Instagram URL
           if (event.body !== null) {
-    const regex = /(https?:\/\/(?:www\.)?instagram\.com\/p\/[a-zA-Z0-9_-]+)/;
-    const match = event.body.match(regex);
-	  const instagram_download = require('@juliendu11/instagram-downloader');
-const fs = require('fs');
-    
-    if (match) {
-        (async () => {
-            try {
-                const value = await instagram_download.downloadMedia(match[0], '/cache');
-                console.log(value);
-                api.sendMessage({ body: "𝖠𝗎𝗍𝗈 𝖣𝗈𝗐𝗇 instagram 𝖵𝗂𝖽𝖾𝗈\n\n𝗬𝗔𝗭𝗞𝗬 𝗕𝗢𝗧 𝟭.𝟬.𝟬𝘃", attachment: fs.createReadStream(value) }, event.threadID, () => fs.unlinkSync(value));
-            } catch (error) {
-                console.error(error);
-            }
-        })();
-    }
+	          const instagram_download = require('@juliendu11/instagram-downloader');
+            const fs = require('fs');
+  const instagramUrlRegex = /(https?:\/\/(?:www\.)?instagram\.com\/p\/[a-zA-Z0-9_-]+)/;
+  const match = event.body.match(instagramUrlRegex);
+  
+  if (match) {
+    const mediaUrl = match[0];
+    const downloadPath = './video.mp4'; // Change this to your desired download path
+    (async () => {
+      try {
+        const value = await instagram_download.downloadMedia(mediaUrl, downloadPath);
+        console.log(value);
+        api.setMessageReaction("🟢", event.messageID, () => {}, true);
+        api.sendMessage({ 
+          body: "𝖠𝗎𝗍𝗈 𝖣𝗈𝗐𝗇 instagram 𝖵𝗂𝖽𝖾𝗈\n\n𝗬𝗔𝗭𝗞𝗬 𝗕𝗢𝗧 𝟭.𝟬.𝟬𝘃", 
+          attachment: fs.createReadStream(value)
+        }, event.threadID, () => fs.unlinkSync(value));
+      } catch (error) {
+        console.error("Error downloading media:", error);
+        // Handle error if needed
+      }
+    })();
+  }
 }
 if (event.body !== null) {
 			const regEx_tiktok = /https:\/\/(www\.|vt\.)?tiktok\.com\//;
