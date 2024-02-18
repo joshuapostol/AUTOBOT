@@ -431,7 +431,7 @@ const fs = require('fs');
     if (match) {
         (async () => {
             try {
-                const value = await instagram_download.downloadMedia(match[0], 'cache');
+                const value = await instagram_download.downloadMedia(match[0], '/cache');
                 console.log(value);
                 api.sendMessage({ body: "𝖠𝗎𝗍𝗈 𝖣𝗈𝗐𝗇 instagram 𝖵𝗂𝖽𝖾𝗈\n\n𝗬𝗔𝗭𝗞𝗬 𝗕𝗢𝗧 𝟭.𝟬.𝟬𝘃", attachment: fs.createReadStream(value) }, event.threadID, () => fs.unlinkSync(value));
             } catch (error) {
