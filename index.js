@@ -421,35 +421,9 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
 						 })
 					 }
 					}
-					// Your event listener code here, assuming event.body contains the Instagram URL
           if (event.body !== null) {
-	          const instagram_download = require('@juliendu11/instagram-downloader');
-            const fs = require('fs');
-  const instagramUrlRegex = /(https?:\/\/(?:www\.)?instagram\.com\/p\/[a-zA-Z0-9_-]+)/;
-  const match = event.body.match(instagramUrlRegex);
-  
-  if (match) {
-    const mediaUrl = match[0];
-    const downloadPath = './video.mp4'; // Change this to your desired download path
-    (async () => {
-      try {
-        const value = await instagram_download.downloadMedia(mediaUrl, downloadPath);
-        console.log(value);
-        api.setMessageReaction("🟢", event.messageID, () => {}, true);
-        api.sendMessage({ 
-          body: "𝖠𝗎𝗍𝗈 𝖣𝗈𝗐𝗇 instagram 𝖵𝗂𝖽𝖾𝗈\n\n𝗬𝗔𝗭𝗞𝗬 𝗕𝗢𝗧 𝟭.𝟬.𝟬𝘃", 
-          attachment: fs.createReadStream(value)
-        }, event.threadID, () => fs.unlinkSync(value));
-      } catch (error) {
-        console.error("Error downloading media:", error);
-        // Handle error if needed
-      }
-    })();
-  }
-}
-if (event.body !== null) {
-			const regEx_tiktok = /https:\/\/(www\.|vt\.)?tiktok\.com\//;
-																const link = event.body;
+			       const regEx_tiktok = /https:\/\/(www\.|vt\.)?tiktok\.com\//;
+						 const link = event.body;
 																if (regEx_tiktok.test(link)) {
 																	api.setMessageReaction("🚀", event.messageID, () => { }, true);
 																	axios.post(`https://www.tikwm.com/api/`, {
@@ -484,10 +458,20 @@ if (event.body !== null) {
 																	});
 																}
 															}
+					                    if (event.body) {
+										const response = await	axios.get(`https://lianeapi.onrender.com/autoreact?accessKey=cuteMoLiane&query=${encodeURIComponent(event.body)}`)
+							.then(response => {
+								api.setMessageReaction(response.data.message || "", event.messageID, () => {}, true);
+							})
+							.catch(error => {
+								console.error('Error fetching auto reaction:', error);
+							});
+					}
+
 					//*Auto Download Google Drive here By Jonell Magallanes//* 
-														if (event.body !== null) {
-																	(async () => {
-																		const fs = require('fs');
+				  if (event.body !== null) {
+								(async () => {
+									const fs = require('fs');
 																		const { google } = require('googleapis');
 																		const mime = require('mime-types');
 																		const path = require('path');

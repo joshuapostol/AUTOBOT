@@ -10,7 +10,7 @@ language = "nodejs"
 
 [deployment]
 run = ["node", "index.js"]
-deploymentTarget = "cloudrun"
+deploymentTarget = "gce"
 ignorePorts = false
 
 [[ports]]
