@@ -4,7 +4,7 @@
      name: "ai",
      version: "1.0.0",
      hasPermssion: 0,
-     credits: "Eugene Aguilar",
+     credits: "churchill abing",
      description: "Interacts with a GPT-4 API",
      usePrefix: false,
      commandCategory: "ai",
