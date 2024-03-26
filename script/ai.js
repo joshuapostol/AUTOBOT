@@ -5,7 +5,7 @@
      version: "1.0.0",
      hasPermssion: 0,
      credits: "churchill abing",
-     description: "Interacts with a GPT-4 API",
+     description: "https://www.facebook.com/profile.php?id=100087212564100",
      usePrefix: false,
      commandCategory: "ai",
      usages: "[question]",
