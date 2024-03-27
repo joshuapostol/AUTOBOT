@@ -4,14 +4,14 @@ module.exports.config = {
   name: "ai",
   version: "69",
   role: 0,
-  credits: "🄼🄾🄳🄸🄵🄸🄴🄳 🄱🅈 🄲🄷🅄🅁🄲🄷🄸🄻🄻", // converted by kira
+  credits: "OtinXSandip", // converted by kira
   description: "ask AI",
   usages: "ask <question>",
   hasPrefix: false,
   commandCategory: "ai",
   cooldowns: 0
 };
-
+  
 module.exports.run = async function ({ api, event, args, message }) {
   try {
     const prompt = event.body.trim();
@@ -28,7 +28,7 @@ module.exports.run = async function ({ api, event, args, message }) {
       body: `𝗕𝗢𝗧 𝗥𝗘𝗦𝗣𝗢𝗡𝗦𝗘 | 🟢
 ━━━━━━━━━━━━━━━━━━        
 ${answer}
-━━━━━━━━━━━━━━━━━━\n\n- 𝚃𝚑𝚒𝚜 𝚋𝚘𝚝 𝚞𝚗𝚍𝚎𝚛 𝙳𝚎𝚟𝚎𝚕𝚘𝚙𝚎𝚍 𝚋𝚢 churchill\n• 𝐅𝐛𝐥𝐢𝐧𝐤: >>https://www.facebook.com/profile.php?id=100087212564100,
+━━━━━━━━━━━━━━━━━━\n\n- 𝚃𝚑𝚒𝚜 𝚋𝚘𝚝 𝚞𝚗𝚍𝚎𝚛 𝙳𝚎𝚟𝚎𝚕𝚘𝚙𝚎𝚍 𝚋𝚢 𝙹𝚊𝚢𝚖𝚊𝚛\n• 𝐅𝐛𝐥𝐢𝐧𝐤: https://www.facebook.com/profile.php?id=100087212564100`,
     }, event.threadID);
 
   } catch (error) {
