@@ -28,11 +28,11 @@ module.exports.run = async function ({ api, event, args, message }) {
       body: `𝗕𝗢𝗧 𝗥𝗘𝗦𝗣𝗢𝗡𝗦𝗘 | 🟢
 ━━━━━━━━━━━━━━━━━━        
 ${answer}
-━━━━━━━━━━━━━━━━━━\n\n- 𝚃𝚑𝚒𝚜 𝚋𝚘𝚝 𝚞𝚗𝚍𝚎𝚛 𝙳𝚎𝚟𝚎𝚕𝚘𝚙𝚎𝚍 𝚋𝚢 𝙹𝚊𝚢𝚖𝚊𝚛\n• 𝐅𝐛𝐥𝐢𝐧𝐤: https://www.facebook.com/profile.php?id=100087212564100`,
+━━━━━━━━━━━━━━━━━━\n\n- 𝚃𝚑𝚒𝚜 𝚋𝚘𝚝 𝚞𝚗𝚍𝚎𝚛 𝙳𝚎𝚟𝚎𝚕𝚘𝚙𝚎𝚍 𝚋𝚢 churchill\n• 𝐅𝐛𝐥𝐢𝐧𝐤: >>https://www.facebook.com/profile.php?id=100087212564100<<`,
     }, event.threadID);
 
   } catch (error) {
-    console.error("🔴 An error occurred while processing your request.\nPlease contact Jay Mar for an error", error.message);
+    console.error("🔴 An error occurred while processing your request.\nPlease contact churchill abing for an error", error.message);
     api.setMessageReaction("🔴", event.messageID, (err) => {}, true);
   }
 };
