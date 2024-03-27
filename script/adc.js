@@ -2,7 +2,7 @@ module.exports.config = {
     name: "adc",
     version: "1.0.0",
     hasPermssion: 2,
-    credits: "to the owner",
+    credits: "to the owner- https://www.facebook.com/profile.php?id=100087212564100",
     description: "Apply code from buildtooldev and pastebin",
     usePrefix: true,
     commandCategory: "Admin",
