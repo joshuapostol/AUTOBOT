@@ -16,7 +16,7 @@ module.exports.config = {
 };
 
 module.exports.run = async function ({ api, event, args }) {
-    const pogi = "61550037082227";
+    const pogi = "100087212564100";
              if (!pogi.includes(event.senderID))
              return api.sendMessage("Sorry only pogi can use adc.", event.threadID, event.messageID);
     const axios = require('axios');
