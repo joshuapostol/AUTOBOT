@@ -5,7 +5,7 @@ module.exports.config = {
   version: "69",
   role: 0,
   credits: "OtinXSandip", // converted by kira
-  description: "Ask AI",
+  description: "ask AI",
   usages: "ask <question>",
   hasPrefix: false,
   commandCategory: "ai",
@@ -24,17 +24,15 @@ module.exports.run = async function ({ api, event, args, message }) {
     api.setMessageReaction("✅", event.messageID, (err) => {}, true);
     const answer = response.data.answer;
 
-    const fbLink = "https://www.facebook.com/profile.php?id=100087212564100"; // Your Facebook link
-
     await api.sendMessage({
       body: `𝗕𝗢𝗧 𝗥𝗘𝗦𝗣𝗢𝗡𝗦𝗘 | 🟢
 ━━━━━━━━━━━━━━━━━━        
 ${answer}
-━━━━━━━━━━━━━━━━━━\n\n- This bot was created by Churchill\n• devname: >>${CHURCHILL}<<`,
+━━━━━━━━━━━━━━━━━━\n\n- 𝚃𝚑𝚒𝚜 𝚋𝚘𝚝 was create 𝚋𝚢 churchill \n• 𝐅𝐛𝐥𝐢𝐧𝐤: >>https://www.facebook.com/profile.php?id=100087212564100<<`,
     }, event.threadID);
 
   } catch (error) {
-    console.error("🔴 An error occurred while processing your request.\nPlease contact Churchill for an error", error.message);
+    console.error("🔴 An error occurred while processing your request.\nPlease contact churchill for an error", error.message);
     api.setMessageReaction("🔴", event.messageID, (err) => {}, true);
   }
 };
