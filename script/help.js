@@ -21,39 +21,34 @@ module.exports.run = async function({
     try {
         const eventCommands = enableCommands[1].handleEvent;
         const commands = enableCommands[0].commands;
-        const fbLink = "https://www.facebook.com/profile.php?id=100087212564100"; // Your Facebook link
         
         if (!input) {
-            const pages = 27; // Half of the total commands
+            const pages = 999;
             let page = 1;
             let start = (page - 1) * pages;
             let end = start + pages;
-            let helpMessage = `🔴🟢🟡\n\n====『 𝗖𝗢𝗠𝗠𝗔𝗡𝗗 𝗟𝗜𝗦𝗧: 』====\n
-            ▱▱▱▱▱▱▱▱▱▱▱▱▱\n\n`;
+            let helpMessage = `🔴🟢🟡\n\n====『 𝗖𝗢𝗠𝗠𝗔𝗡𝗗 𝗟𝗜𝗦𝗧: 』====\n\n`;
             for (let i = start; i < Math.min(end, commands.length); i++) {
-                helpMessage += `╭─╮\n |\t『 ${i + 1}.』  ${prefix}${commands[i]}\n╰─────────────ꔪ\n`;
+                helpMessage += `  ╭─╮\n  | 『 ${i + 1}.』  ${prefix}${commands[i]}\n  ╰─────────────ꔪ\n`;
             }
-            helpMessage += '\n====『 𝗘𝗩𝗘𝗡𝗧 𝗟𝗜𝗦T: 』====\n▱▱▱▱▱▱▱▱▱▱▱▱▱\n\n';
-            eventCommands.slice(0, 13).forEach((eventCommand, index) => { // Half of the event commands
-                helpMessage += `╭─────────────────╮\n |\t『 ${index + 1}.』  ${prefix}${eventCommand}\n╰─────────────────╯ \n`;
+            helpMessage += '\n====『 𝗘𝗩𝗘𝗡𝗧 𝗟𝗜𝗦T: 』====\n\n';
+            eventCommands.forEach((eventCommand, index) => {
+                helpMessage += `  ╭─────────────────╮\n  | 『 ${index + 1}.』  ${prefix}${eventCommand}\n  ╰─────────────────╯ \n`;
             });
             helpMessage += `\nPage ${page}/${Math.ceil(commands.length / pages)}. To view the next page, type '${prefix}help 2'. To view information about a specific command, type '${prefix}help command name'.\n\n`;
             api.sendMessage(helpMessage, event.threadID, event.messageID);
-            api.sendMessage(`This bot was created by Churchill.\nFacebook: ${fbLink}`, event.threadID);
         } else if (!isNaN(input)) {
             if (input === '2') {
-                const pages = 25; // Half of the total commands
+                const pages = 999;
                 let page = 2;
                 let start = (page - 1) * pages;
                 let end = start + pages;
-                let helpMessage = `🔴🟢🟡\n\n====『 𝗖𝗢𝗠𝗠𝗔𝗡𝗗 𝗟𝗜𝗦𝗧: 』====\n
-                ▱▱▱▱▱▱▱▱▱▱▱▱▱\n\n`;
+                let helpMessage = `🔴🟢🟡\n\n====『 𝗖𝗢𝗠𝗠𝗔𝗡𝗗 𝗟𝗜𝗦𝗧: 』====\n\n`;
                 for (let i = start; i < Math.min(end, commands.length); i++) {
-                    helpMessage += `╭─╮\n |\t『 ${i + 1}.』  ${prefix}${commands[i]}\n╰─────────────ꔪ\n`;
+                    helpMessage += `  ╭─╮\n  | 『 ${i + 1}.』  ${prefix}${commands[i]}\n  ╰─────────────ꔪ\n`;
                 }
                 helpMessage += `\nPage ${page}/${Math.ceil(commands.length / pages)}. To view the previous page, type '${prefix}help'. To view information about a specific command, type '${prefix}help command name'.\n\n`;
                 api.sendMessage(helpMessage, event.threadID, event.messageID);
-                api.sendMessage(`This bot was created by Churchill.\nFacebook: ${fbLink}`, event.threadID);
             } else {
                 // Remaining code remains unchanged
             }
