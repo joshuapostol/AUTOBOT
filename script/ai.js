@@ -8,7 +8,8 @@ module.exports = {
         author: "OtinXSandip",
         longDescription: "AI",
         category: "ai",
-        guide: { en: "/ai <question>: Ask the AI" }
+        guide: { en: "/ai <question>: Ask the AI" },
+        visibility: true // Set the visibility to true
     },
 
     onChat: async function ({ api, event, args, message }) {
