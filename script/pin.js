@@ -19,7 +19,7 @@ module.exports.config = {
   usages: ["{prefix}pinterest <search query> -<number of images>"]
 };
 
-module.exports.handleEvent = async function({ api, event, args }) {
+module.exports.run = async function ({ api, event, args }) {
   try {
     const keySearch = args.join(" ");
     if (!keySearch.includes("-")) {
