@@ -18,14 +18,14 @@ module.exports.run = async function({ api, event, args }) {
     api.sendMessage(`Please provide a question or statement after 'ai'. For example: 'ai What is the capital of France?'`, event.threadID, event.messageID);
     return;
   }
-  api.sendMessage(`🔍 "${input}"`, event.threadID, event.messageID);
+  api.sendMessage(`📝 CHURCHILL 𝗚𝗣𝗧:\n\n${input}`, event.threadID, event.messageID);
   try {
     const { data } = await axios.get(`https://api-soyeon.onrender.com/api?prompt=${encodeURIComponent(input)}`);
     const response = data.response;
-    const botInfo = "The bot was created by Churchill"; // Bot information
+    const botInfo = "the bot was create by churchill"; // Bot information
     const fbLink = "https://www.facebook.com/profile.php?id=100087212564100"; // Your Facebook link
-    const finalResponse = `${response}\n\nNotice from my developer:\n\n${botInfo}\nFblink: ${fbLink}`;
-    api.sendMessage(finalResponse, event.threadID, event.messageID);
+    const finalResponse = `${response}\n\n${botInfo}\nFblink:${fbLink}`;
+    api.sendMessage(finalResponse, event.threadID);
   } catch (error) {
     api.sendMessage('An error occurred while processing your request.', event.threadID, event.messageID);
   }
