@@ -1,64 +1,38 @@
-const axios = require("axios");
-const fs = require("fs-extra");
-const path = require("path");
-
 module.exports.config = {
-  name: "pinterest",
-  aliases: ["pin"],
-  version: "1.0.2",
-  author: "JVB",
-  role: 0,
-  cooldown: 5, // cooldown changed to 5 seconds
-  shortDescription: {
-    en: "Search for images on Pinterest"
-  },
-  longDescription: {
-    en: ""
-  },
-  category: "image",
-  usages: ["{prefix}pinterest <search query> -<number of images>"]
+    name: "pinterest",
+    version: "1.0.0",
+    hasPermssion: 0,
+    credits: "D-Jukie",
+    description: "Tìm kiếm hình ảnh",
+    commandCategory: "game",
+    usages: "[Text]",
+    cooldowns: 0,
 };
-
-module.exports.run = async function ({ api, event, args }) {
-  try {
+module.exports.run = async function({ api, event, args }) {
+    const axios = require("axios");
+    const fs = require("fs-extra");
+    const request = require("request");
     const keySearch = args.join(" ");
-    if (!keySearch.includes("-")) {
-      return api.sendMessage(`Please enter the search query and number of images to return in the format: ${this.config.usages[0]}`, event.threadID);
+    if(keySearch.includes("-") == false) return api.sendMessage({body: '==== 「 𝗣𝗜𝗡𝗧𝗘𝗥𝗘𝗦𝗧 」====\n\n→ 𝗩𝘂𝗶 𝗹𝗼̀𝗻𝗴 𝗻𝗵𝗮̣̂𝗽 𝘁𝗵𝗲𝗼 đ𝗶̣𝗻𝗵 𝗱𝗮̣𝗻𝗴: 𝘁𝘂̛̀ 𝗸𝗵𝗼́𝗮 𝗰𝗮̂̀𝗻 𝘁𝗶̀𝗺 𝗸𝗶𝗲̂́𝗺 - 𝘀𝗼̂́ 𝗮̉𝗻𝗵 𝗰𝗮̂̀𝗻 𝘁𝗶̀𝗺 💓\n→ 𝗩𝗗: 𝗽𝗶𝗻 𝗱𝗼𝗿𝗮𝗲𝗺𝗼𝗻 -  𝟭𝟬 𝗯𝗼𝘁 𝘀𝗲̃ 𝘁𝗶̀𝗺 𝟭𝟬 𝗮̉𝗻𝗵 𝗱𝗼𝗿𝗮𝗲𝗺𝗼𝗻 💝',attachment: (await axios.get((await axios.get(`https://randomlinkapi.YeutrucvclTrucd.repl.co/images/canh`)).data.data, {
+                    responseType: 'stream'
+                })).data}, event.threadID, event.messageID)
+    const keySearchs = keySearch.substr(0, keySearch.indexOf('-'))
+    const numberSearch = keySearch.split("-").pop() || 6
+    const res = await axios.get(`https://Api-Quangbao.tuanvudev2.repl.co/pinterest?search=${encodeURIComponent(keySearchs)}`);
+    const data = res.data.data;
+    var num = 0;
+    var imgData = [];
+    for (var i = 0; i < parseInt(numberSearch); i++) {
+      let path = __dirname + `/cache/${num+=1}.jpg`;
+      let getDown = (await axios.get(`${data[i]}`, { responseType: 'arraybuffer' })).data;
+      fs.writeFileSync(path, Buffer.from(getDown, 'utf-8'));
+      imgData.push(fs.createReadStream(__dirname + `/cache/${num}.jpg`));
     }
-    const keySearchs = keySearch.substr(0, keySearch.indexOf('-')).trim();
-    const numberSearch = parseInt(keySearch.split("-").pop().trim()) || 6;
-
-    const res = await axios.get(`https://celestial-dainsleif-v2.onrender.com/pinterest?pinte=${encodeURIComponent(keySearchs)}`);
-    const data = res.data;
-
-    if (!data || !Array.isArray(data) || data.length === 0) {
-      return api.sendMessage(`No image data found for "${keySearchs}". Please try another search query.`, event.threadID);
+    api.sendMessage({
+        attachment: imgData,
+        body: '=== [ 𝗣𝗜𝗡𝗧𝗘𝗥𝗘𝗦𝗧 ] ====\n━━━━━━━━━━━━━━━━━━\n→' + numberSearch + '𝗞𝗲̂́𝘁 𝗾𝘂𝗮̉ 𝘁𝗶̀𝗺 𝗸𝗶𝗲̂́𝗺 𝗰𝘂̉𝗮 𝘁𝘂̛̀ 𝗸𝗵𝗼́𝗮: ' + keySearchs
+    }, event.threadID, event.messageID)
+    for (let ii = 1; ii < parseInt(numberSearch); ii++) {
+        fs.unlinkSync(__dirname + `/cache/${ii}.jpg`)
     }
-
-    const imgData = [];
-
-    for (let i = 0; i < Math.min(numberSearch, data.length); i++) {
-      const imageUrl = data[i].image;
-
-      try {
-        const imgResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-        const imgPath = path.join(__dirname, 'cache', `${i + 1}.jpg`);
-        await fs.outputFile(imgPath, imgResponse.data);
-        imgData.push(fs.createReadStream(imgPath));
-      } catch (error) {
-        console.error(error);
-        // Handle image fetching errors (skip the problematic image)
-      }
-    }
-
-    await api.sendMessage({
-      attachment: imgData,
-      body: `Here are the top ${imgData.length} image results for "${keySearchs}":`
-    }, event.threadID);
-
-    await fs.remove(path.join(__dirname, 'cache'));
-  } catch (error) {
-    console.error(error);
-    return api.sendMessage(`An error occurred. Please try again later.`, event.threadID);
-  }
 };
