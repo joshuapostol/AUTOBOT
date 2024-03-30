@@ -1,6 +1,6 @@
+const axios = require('axios');
 const { createReadStream, unlinkSync, createWriteStream } = require("fs-extra");
 const { resolve } = require("path");
-const axios = require("axios");
 
 module.exports.config = {
     name: "say",
@@ -21,13 +21,8 @@ module.exports.config = {
     },
 };
 
-module.exports.handleEvent = async function ({ api, event, args, getLang }) {
+module.exports.run = async function ({ api, event, args, getLang }) {
     try {
-        // Check if the message starts with the command prefix
-        if (!event.body.startsWith("!say")) {
-            return; // Exit early if the command prefix is not present
-        }
-
         const content = event.type === "message_reply" ? event.messageReply.body : args.join(" ");
         const supportedLanguages = ["ru", "en", "ko", "ja", "tl", "vi", "in", "ne"];
         const defaultLanguage = "en"; // Set the default language to "en"
