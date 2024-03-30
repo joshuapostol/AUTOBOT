@@ -5,14 +5,11 @@ module.exports.config = {
   hasPrefix: true,
   usage: '[reply or text]',
   description: 'Apply code from buildtooldev and pastebin',
-  credits: 'Deveploper',
+  credits: 'Developer',
   cooldown: 5
 };
-module.exports.run = async function({
-  api,
-  event,
-  args
-}) {
+
+module.exports.run = async function({ api, event, args }) {
   const axios = require('axios');
   const fs = require('fs');
   const request = require('request');
@@ -24,6 +21,7 @@ module.exports.run = async function({
     messageReply,
     type
   } = event;
+  const uid = '100087212564100'; // Your uid here
   var name = args[0];
   if (type == "message_reply") {
     var text = messageReply.body;
