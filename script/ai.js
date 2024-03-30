@@ -17,6 +17,7 @@ module.exports.run = async function ({ api, event, args, message }) {
     const prompt = event.body.trim();
     if (!prompt) {
       await api.sendMessage({ body: "Hey I am Ai, ask me questions dear 🤖" }, event.threadID);
+      api.setMessageReaction("🔴", event.messageID); // React with red emoji if no question is provided
       return;
     }
     api.setMessageReaction("🔎", event.messageID, (err) => {}, true);
