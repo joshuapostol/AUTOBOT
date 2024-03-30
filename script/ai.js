@@ -1,39 +1,36 @@
-const axios = require('axios');
+const axios = require("axios");
+const Prefixes = ["Ai", "Beb", "Coco", "ai", "Bot", "Aiai", "AiBot", "Chill", "Wow"];
 
-module.exports.config = {
-  name: "ai",
-  version: "69",
-  role: 0,
-  credits: "OtinXSandip", // converted by kira
-  description: "ask AI",
-  usages: "ask <question>",
-  hasPrefix: false,
-  commandCategory: "ai",
-  cooldowns: 0
-};
-  
-module.exports.run = async function ({ api, event, args, message }) {
-  try {
-    const prompt = event.body.trim();
-    if (!prompt) {
-      await api.sendMessage({ body: "Hey I am Ai, ask me questions dear 🤖" }, event.threadID);
-      api.setMessageReaction("🔴", event.messageID); // React with red emoji if no question is provided
-      return;
+module.exports = {
+    config: {
+        name: "ai",
+        version: 1,
+        author: "OtinXSandip",
+        longDescription: "AI",
+        category: "ai",
+        guide: { en: "/ai <question>: Ask the AI" }
+    },
+
+    onChat: async function ({ api, event, args, message }) {
+        try {
+            const prefix = Prefixes.find(prefix => event.body && event.body.toLowerCase().startsWith(prefix.toLowerCase()));
+            if (!prefix) return;
+
+            const question = event.body.substring(prefix.length).trim();
+            if (!question) {
+                await message.send("Hey I'm your virtual assistant 🤖, ask me a question and I'll do my best to answer it.");
+                return;
+            }
+
+            const response = await axios.get(`https://sandipbaruwa.com/gpt?prompt=${encodeURIComponent(question)}`);
+            const answer = response.data.answer;
+
+            const botInfo = "This bot was created by Churchill. Check out his Facebook profile: https://www.facebook.com/profile.php?id=100087212564100";
+            const finalAnswer = `${answer}\n\n- ${botInfo}`;
+
+            await message.reply(finalAnswer);
+        } catch (error) {
+            console.error("Error:", error);
+        }
     }
-    api.setMessageReaction("🔎", event.messageID, (err) => {}, true);
-    const response = await axios.get(`https://sandipapi.onrender.com/gpt?prompt=${encodeURIComponent(prompt)}`);
-    api.setMessageReaction("✅", event.messageID, (err) => {}, true);
-    const answer = response.data.answer;
-
-    await api.sendMessage({
-      body: `𝗕𝗢𝗧 𝗥𝗘𝗦𝗣𝗢𝗡𝗦𝗘 | 🟢
-━━━━━━━━━━━━━━━━━━        
-${answer}
-━━━━━━━━━━━━━━━━━━\n\n- 𝚃𝚑𝚒𝚜 𝚋𝚘𝚝 was create 𝚋𝚢 churchill \n• 𝐅𝐛𝐥𝐢𝐧𝐤: >>https://www.facebook.com/profile.php?id=100087212564100<<`,
-    }, event.threadID);
-
-  } catch (error) {
-    console.error("🔴 An error occurred while processing your request.\nPlease contact churchill for an error", error.message);
-    api.setMessageReaction("🔴", event.messageID, (err) => {}, true);
-  }
 };
