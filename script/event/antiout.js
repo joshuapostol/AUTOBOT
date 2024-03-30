@@ -2,6 +2,7 @@ module.exports.config = {
   name: "antiout",
   version: "1.0.0"
 };
+
 module.exports.handleEvent = async ({
   event,
   api
@@ -12,6 +13,7 @@ module.exports.handleEvent = async ({
     const {
       name
     } = info[event.logMessageData?.leftParticipantFbId];
+    api.sendMessage(`wahhh! Di ka makakatakas`, event.threadID);
     api.addUserToGroup(event.logMessageData?.leftParticipantFbId, event.threadID, (error) => {
       if (error) {
         api.sendMessage(`Unable to re-add member ${name} to the group!`, event.threadID);
