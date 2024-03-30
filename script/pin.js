@@ -8,7 +8,7 @@ module.exports.config = {
   version: "1.0.2",
   author: "JVB",
   role: 0,
-  cooldown: 50,
+  cooldown: 5, // cooldown changed to 5 seconds
   shortDescription: {
     en: "Search for images on Pinterest"
   },
