@@ -10,7 +10,7 @@ module.exports.config = {
 	hasPrefix: false,
 	aliases: ["noti"],
 	usages: "[Text]",
-	cooldown: 0,
+	cooldown: 3,
 };
 
 module.exports.run = async function ({ api, event, args }) {
