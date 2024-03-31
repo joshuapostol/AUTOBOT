@@ -23,7 +23,7 @@ module.exports.run = async function ({ api, event, args }) {
       api.setMessageReaction("✅", event.messageID, (err) => {}, true);
 				const answer = response.data.answer;
 
-				await api.sendMessage('🤖 𝗣𝗵𝗼𝗻𝗸 𝗔𝗜' + answer, event.threadID);
+				await api.sendMessage('🤖 CHURCHILL 𝗔𝗜' + answer, event.threadID);
 		} catch (error) {
 				console.error("⚠️ | Error Please Contact the Developer for an Error\n\n-fblink: https://www.facebook.com/jaymar.dev.00", error.message);
       api.setMessageReaction("⚠️", event.messageID, (err) => {}, true);
