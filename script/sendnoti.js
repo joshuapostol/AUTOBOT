@@ -13,7 +13,7 @@ module.exports.config = {
 	cooldown: 0,
 };
 
-module.exports.run = async function ({ api, event, args, admin }) {
+module.exports.run = async function ({ api, event, args }) {
 	const threadList = await api.getThreadList(100, null, ["INBOX"]);
 	let sentCount = 0;
 	const custom = args.join(" ");
@@ -21,7 +21,11 @@ module.exports.run = async function ({ api, event, args, admin }) {
 	async function sendMessage(thread) {
 		try {
 			await api.sendMessage(
-`🟢🟡🔴\n ----------------\n『 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐓𝐈𝐎𝐍 FROM CHURCHILL』\n\n ----------------\n𝗠𝗲𝘀𝘀𝗮𝗴𝗲:「${custom}」\n _________________________`,
+				`𝙉𝙊𝙏𝙄𝘾𝙀 𝙁𝙍𝙊𝙈 𝘿𝙀𝙑𝙀𝙇𝙊𝙋𝙀𝙍 
+ ---------------- 
+ Developer Name :Churchill
+ --------------- 
+ 『𝗡𝗼𝘁𝗶𝗰𝗲』${custom}`,
 				thread.threadID
 			);
 			sentCount++;
