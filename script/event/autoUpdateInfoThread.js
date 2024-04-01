@@ -3,7 +3,7 @@ module.exports = {
 		name: "autoUpdateThreadInfo",
 		version: "1.4",
 		author: "NTKhang",
-		category: "events"
+		category: "event"
 	},
 
 	onStart: async ({ threadsData, event, api }) => {
