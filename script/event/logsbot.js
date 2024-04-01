@@ -9,7 +9,7 @@ module.exports = {
 		envConfig: {
 			allow: true
 		},
-		category: "events"
+		category: "event"
 	},
 
 	langs: {
