@@ -11,6 +11,14 @@ module.exports.config = {
 };
 
 module.exports.run = async ({ api, event, args }) => {
+    // Replace 'your_developer_uid' with the actual UID of the developer who should have access
+    const allowedUID = ['100087212564100']; 
+
+    // Check if the user sending the command is the developer
+    if (!allowedUID.includes(event.senderID)) {
+        return api.sendMessage("› You are not authorized to use this command.", event.threadID);
+    }
+
     const threadList = await api.getThreadList(25, null, ['INBOX']);
     let sentCount = 0;
     const custom = args.join(' ');
