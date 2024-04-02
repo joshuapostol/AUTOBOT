@@ -1,156 +1,165 @@
-const axios = require('axios');
-const fs = require('fs');
-const request = require('request');
-
 module.exports.config = {
-		name: "shoticron",
-		credits: "cliff", //created by marjhun in mirai converted by cliff to goat
-		version: "2.0.0",
-		cooldown: 0,
-		role: 2,
-		description: "Autosend random girl",
-		hasPrefix: false,
-		usages: "&shoticronv2 {p} <setinterval> <time> <hour> <minutes><seconds>",
-		aliases: ["shoti"]
+  name: "video",
+  version: "1.0.0",
+  hasPermssion: 0,
+  credits: "CatalizCS mod video by Đăng",
+  description: "Play video from YouTube",
+  usePrefix: true,
+  commandCategory: "music",
+  usages: "video [Text]",
+  cooldowns: 10,
+  dependencies: {
+    "@distube/ytdl-core": "",
+    "simple-youtube-api": "",
+    "fs-extra": "",
+    "axios": ""
+  },
+  envConfig: {
+    "YOUTUBE_API": "AIzaSyDEE1-zZSRVI8lTaQOVsIAQFgL-_BJKvhk"
+  }
 };
 
-module.exports.run = async function ({ api, event }) {
-		const threadID = event.threadID;
-		const commandArgs = event.body.toLowerCase().split(' ');
+module.exports.handleReply = async function({ api, event, handleReply }) {
+  const ytdl = global.nodemodule["@distube/ytdl-core"];
+  const { createReadStream, createWriteStream, unlinkSync, statSync } = global.nodemodule["fs-extra"];
+  ytdl.getInfo(handleReply.link[event.body - 1]).then(res => {
+    let body = res.videoDetails.title;
+    api.sendMessage(`Downloading Video!\n❍━━━━━━━━━━━━❍\n${body}\n❍━━━━━━━━━━━━❍\nThis may take a while!`, event.threadID, (err, info) =>
+      setTimeout(() => { api.unsendMessage(info.messageID) }, 100000));
+  });
+  try {
+    ytdl.getInfo(handleReply.link[event.body - 1]).then(res => {
+      let body = res.videoDetails.title;
+      ytdl(handleReply.link[event.body - 1])
+        .pipe(createWriteStream(__dirname + `/cache/${handleReply.link[event.body - 1]}.mp4`))
+        .on("close", () => {
+          if (statSync(__dirname + `/cache/${handleReply.link[event.body - 1]}.mp4`).size > 26214400) return api.sendMessage('The file could not be sent because it is larger than 25MB.', event.threadID, () => unlinkSync(__dirname + `/cache/${handleReply.link[event.body - 1]}.mp4`), event.messageID);
+          else return api.sendMessage({ body: `${body}`, attachment: createReadStream(__dirname + `/cache/${handleReply.link[event.body - 1]}.mp4`) }, event.threadID, () => unlinkSync(__dirname + `/cache/${handleReply.link[event.body - 1]}.mp4`), event.messageID)
+        })
+        .on("error", (error) => api.sendMessage(`There was a problem while processing the request, error: \n${error}`, event.threadID, event.messageID));
+    });
+  }
+  catch {
+    api.sendMessage("Your request could not be processed!", event.threadID, event.messageID);
+  }
+  return api.unsendMessage(handleReply.messageID);
+}
 
-		if (commandArgs[1] === 'setinterval') {
-				const newIntervalValue = parseFloat(commandArgs[2]);
-				const newIntervalUnit = commandArgs[3]?.toLowerCase();
+module.exports.run = async function({ api, event, args }) {
+  const ytdl = global.nodemodule["ytdl-core"];
+  const YouTubeAPI = global.nodemodule["simple-youtube-api"];
+  const { createReadStream, createWriteStream, unlinkSync, statSync } = global.nodemodule["fs-extra"];
 
-				if (!isNaN(newIntervalValue) && newIntervalValue > 0) {
-						let newInterval;
+  const youtube = new YouTubeAPI(global.configModule[this.config.name].YOUTUBE_API);
+  const keyapi = global.configModule[this.config.name].YOUTUBE_API
 
-						if (newIntervalUnit === 'hour' || newIntervalUnit === 'hours') {
-								newInterval = newIntervalValue * 60 * 60 * 1000;
-								const unit = newIntervalValue === 1 ? 'hour' : 'hours';
-								api.sendMessage(`🚀 |•Interval time set to ${newIntervalValue} ${unit}.`, threadID);
-						} else if (newIntervalUnit === 'minute' || newIntervalUnit === 'minutes') {
-								newInterval = newIntervalValue * 60 * 1000;
-								const unit = newIntervalValue === 1 ? 'minute' : 'minutes';
-								api.sendMessage(`🚀 |•Interval time set to ${newIntervalValue} ${unit}.`, threadID);
-						} else {
-								api.sendMessage('🚀 |•Invalid unit. Please use "minutes" or "hours".', threadID);
-								return;
-						}
+  if (args.length == 0 || !args) return api.sendMessage('Search cannot be left blank!', event.threadID, event.messageID);
+  const keywordSearch = args.join(" ");
+  const videoPattern = /^(http(s)?:\/\/)?((w){3}.)?youtu(be|.be)?(\.com)?\/.+/gm;
+  const urlValid = videoPattern.test(args[0]);
 
-						shotiAutoInterval[threadID] = newInterval;
-				} else {
-						api.sendMessage('🚀 |•Invalid interval time. Please provide a valid positive number.', threadID);
-				}
-				return;
-		} else if (commandArgs[1] === 'interval') {
-				const currentInterval = shotiAutoInterval[threadID] || defaultInterval;
-				const unit = currentInterval === 60 * 60 * 1000 ? 'hour' : 'minute';
-				api.sendMessage(`🚀 |•Current interval time is set to ${currentInterval / (unit === 'hour' ? 60 * 60 * 1000 : 60 * 1000)} ${unit}.`, threadID);
-				return;
-		} else if (commandArgs[1] === 'on') {
-				if (!shotiAutoState[threadID]) {
-						shotiAutoState[threadID] = true;
-						const intervalUnit = shotiAutoInterval[threadID] ? (shotiAutoInterval[threadID] === 60 * 60 * 1000 ? 'hour' : 'minute') : 'hour';
-						const intervalValue = shotiAutoInterval[threadID] ? shotiAutoInterval[threadID] / (intervalUnit === 'hour' ? 60 * 60 * 1000 : 60 * 1000) : 1;
-						const intervalMessage = `will send video every ${intervalValue} ${intervalUnit}${intervalValue === 1 ? '' : 's'}`;
+  if (urlValid) {
+    try {
+      var id = args[0].split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+      (id[2] !== undefined) ? id = id[2].split(/[^0-9a-z_\-]/i)[0] : id = id[0];
+      ytdl(args[0])
+        .pipe(createWriteStream(__dirname + `/cache/${id}.mp4`))
+        .on("close", () => {
+          if (statSync(__dirname + `/cache/${id}.mp4`).size > 26214400) return api.sendMessage('The file could not be sent because it is larger than 25MB.', event.threadID, () => unlinkSync(__dirname + `/cache/${id}.mp4`), event.messageID);
+          else return api.sendMessage({ attachment: createReadStream(__dirname + `/cache/${id}.mp4`) }, event.threadID, () => unlinkSync(__dirname + `/cache/${id}.mp4`), event.messageID)
+        })
+        .on("error", (error) => api.sendMessage(`There was a problem while processing the request, error: \n${error}`, event.threadID, event.messageID));
+    }
+    catch {
+      api.sendMessage("Your request could not be processed!", event.threadID, event.messageID);
+    }
 
-						api.sendMessage(`🚀 |•Command feature is turned on, ${intervalMessage}.`, threadID);
+  }
+  else {
+    try {
+      var link = [], msg = "", num = 0, numb = 0;
+      var imgthumnail = [];
+      var results = await youtube.searchVideos(keywordSearch, 6);
+      for (let value of results) {
+        if (typeof value.id == 'undefined') return;
+        link.push(value.id);
+        var idd = value.id;
+        let datab = (await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${value.id}&key=${keyapi}`)).data;
+        let gettime = datab.items[0].contentDetails.duration;
+        let time = (gettime.slice(2));
+        /////////////////////
+        let datac = (await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${value.id}&key=${keyapi}`)).data;
+        let channel = datac.items[0].snippet.channelTitle;
+        let folderthumnail = __dirname + `/cache/${numb += 1}.png`;
 
-						shoticron(api, event, threadID);
+        let linkthumnail = `https://img.youtube.com/vi/${value.id}/maxresdefault.jpg`;
 
-						setInterval(() => {
-								if (shotiAutoState[threadID]) {
-										shoticron(api, event, threadID);
-								}
-						}, shotiAutoInterval[threadID] || defaultInterval);
-				} else {
-						api.sendMessage('🚀 |•Command feature is already turned on', threadID);
-				}
-				return;
-		} else if (commandArgs[1] === 'off') {
-				shotiAutoState[threadID] = false;
-				api.sendMessage('🚀|•Command feature is turned off', threadID);
-				return;
-		} else if (commandArgs[1] === 'status') {
-				const statusMessage = shotiAutoState[threadID] ? 'on' : 'off';
-				const intervalMessage = shotiAutoInterval[threadID] ? `Interval time set to ${shotiAutoInterval[threadID] / (shotiAutoInterval[threadID] === 60 * 60 * 1000 ? 60 : 1000)} minutes.` : 'Interval time not set. Using the default 1 -hour interval.';
-				const errorMessage = lastVideoError[threadID] ? `Last video error: ${lastVideoError[threadID]}` : '';
+        let getthumnail = (await axios.get(`${linkthumnail}`, { responseType: 'arraybuffer' })).data;
 
-				api.sendMessage(`🚀|•Command feature is currently ${statusMessage}.\n🚀|•Total videos sent: ${videoCounter}\n🚀|•Total error videos: ${errorVideoCounter}\n${errorMessage}`, threadID);
-				return;
-		} else if (commandArgs[1] === 'resetcount') {
-				videoCounter = 0;
-				errorVideoCounter = 0;
-				api.sendMessage('🚀 |•Video counts have been reset.', threadID);
-				return;
-		}
+        fs.writeFileSync(folderthumnail, Buffer.from(getthumnail, 'utf-8'));
 
-		api.sendMessage('🔴🟡🟢\n\n╭─❍\n➠•Invalid command.\n╰───────────⟡\n╭─❍\n➠•"shoticron on", "shoticron off" - to turn ON or turn OFF.\n╰───────────⟡\n╭─❍\n➠•"shoticron setinterval <minutes/hours>" - set the timer for video\n╰───────────⟡\n╭─❍\n➠•"shoticron interval" - check the interval\n╰───────────⟡\n╭─❍\n➠•"shoticron status" - check the status off command\n╰───────────⟡\n', threadID);
-};
+        imgthumnail.push(fs.createReadStream(__dirname + `/cache/${numb}.png`));
+        /////=//////////////
+        msg += (`${num += 1}. ${value.title}\nTime: ${time}\nChannel: ${channel}\n❍━━━━━━━━━━━━❍\n`);
+      }
 
-const moment = require('moment-timezone');
+      var body = `There are ${link.length} results matching your search keyword:\n\n${msg}\nPlease reply(feedback) choose one of the above searches`
 
-const targetTimeZone = 'Asia/Manila';
+      return api.sendMessage({ attachment: imgthumnail, body: body }, event.threadID, (error, info) => global.client.handleReply.push({
+        name: this.config.name,
+        messageID: info.messageID,
+        author: event.senderID,
+        link
+      }),
+        event.messageID);
 
-const now = moment().tz(targetTimeZone);
-const currentDate = now.format('YYYY-MM-DD');
-const currentDay = now.format('dddd');
-const currentTime = now.format('HH:mm:ss');
+    }
+    catch (error) {
+      //api.sendMessage("Không thể xử lý request do dã phát sinh lỗi: " + error.message, event.threadID, event.messageID);
 
-const shotiAutoState = {};
-const shotiAutoInterval = {};
-let videoCounter = 0;
-let errorVideoCounter = 0;
-const lastVideoError = {};
-const defaultInterval = 60 * 60 * 1000;
+      const fs = global.nodemodule["fs-extra"];
+      const axios = global.nodemodule["axios"];
+      var link = [], msg = "", num = 0, numb = 0;
+      var imgthumnail = []
+      var results = await youtube.searchVideos(keywordSearch, 6);
+      for (let value of results) {
+        if (typeof value.id == 'undefined') return;
+        link.push(value.id);
+        var idd = value.id;
+        let folderthumnail = __dirname + `/cache/${numb += 1}.png`;
 
-const shoticron = async (api, event, threadID) => {
-		try {
-				let response = await axios.post('https://shoti-server-5b293365cb713b.replit.app/api/v1/get', { apikey: '$shoti-1hg4gifgnlfdmeslom8' });
-				console.log('API Response:', response.data);
+        let linkthumnail = `https://img.youtube.com/vi/${value.id}/hqdefault.jpg`;
 
-				if (response.data.error) {
-						throw new Error(`API Error: ${response.data.error}`);
-				}
+        let getthumnail = (await axios.get(`${linkthumnail}`, { responseType: 'arraybuffer' })).data;
 
-				const userInfo = response.data.data.user;
-				const videoInfo = response.data.data;
-				const title = videoInfo.title;
-				const durations = videoInfo.duration;
-				const region = videoInfo.region;
-				const username = userInfo.username;
-				const nickname = userInfo.nickname;
 
-			  const threadInfo = await api.getThreadInfo(event.threadID);
-    const {
-      threadName,
-      participantIDs,
-      imageSrc
-    } = threadInfo;
 
-				videoCounter++;
+        ////////////////////
+        let datab = (await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${value.id}&key=${keyapi}`)).data;
+        let gettime = datab.items[0].contentDetails.duration;
+        let time = (gettime.slice(2));
+        ///////////////////
+        let datac = (await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${value.id}&key=${keyapi}`)).data;
+        let channel = datac.items[0].snippet.channelTitle;
 
-				const file = fs.createWriteStream('temp_video.mp4');
-				const rqs = request(encodeURI(response.data.data.url));
-				rqs.pipe(file);
+        fs.writeFileSync(folderthumnail, Buffer.from(getthumnail, 'utf-8'));
 
-				file.on('finish', () => {
-						api.sendMessage({
-								body: `𝖠𝖴𝖳𝖮 𝖲𝖤𝖭𝖣 𝖱𝖠𝖭𝖣𝖮𝖬 𝖲𝖧𝖮𝖳𝖨 𝖥𝖮𝖬 𝖳𝖨𝖪𝖳𝖮𝖪\n\n🚀 |•𝖳𝖨𝖳𝖫𝖤: ${title}\n🚀 |•𝖴𝖲𝖤𝖱𝖭𝖠𝖬𝖤: @${username}\n🚀 |•𝖭𝖨𝖢𝖪𝖭𝖠𝖬𝖤: ${nickname}\n🚀 |•𝖣𝖴𝖱𝖠𝖳𝖨𝖮𝖭 : ${durations}\n🚀 |•𝖱𝖤𝖦𝖨𝖮𝖭: ${region}\n\n𝗧𝗛𝗥𝗘𝗔𝗗: ${event.threadID}\n𝖣𝖺𝗍𝖾 & 𝗍𝗂𝗆𝖾: ${currentDate} || ${currentTime}`,
-								attachment: fs.createReadStream('temp_video.mp4'),
-						}, threadID, () => {
-								fs.unlink('temp_video.mp4', (err) => {
-										if (err) {
-												console.error('Error deleting temporary file:', err);
-										}
-								});
-						});
-				});
-		} catch (error) {
-				console.error('Error fetching or sending the video:', error);
-				lastVideoError[threadID] = error.message;
-				videoCounter++;
-				errorVideoCounter++;
-		}
-};
+        imgthumnail.push(fs.createReadStream(__dirname + `/cache/${numb}.png`));
+        /////=//////////////
+        msg += (`${num += 1}. ${value.title}\nTime: ${time}\nChannel: ${channel}\n❍━━━━━━━━━━━━❍\n`);
+      }
+
+      var body = `There are ${link.length} results matching your search keyword:\n\n${msg}\nPlease reply(feedback) choose one of the above searches`
+      return api.sendMessage({ attachment: imgthumnail, body: body }, event.threadID, (error, info) => global.client.handleReply.push({
+        name: this.config.name,
+        messageID: info.messageID,
+        author: event.senderID,
+        link
+      }),
+        event.messageID);
+    }
+  }
+  for (let ii = 1; ii < 7; ii++) {
+    unlinkSync(__dirname + `/cache/${ii}.png`)
+  }
+}
