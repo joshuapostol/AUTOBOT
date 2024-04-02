@@ -1,78 +1,76 @@
-module.exports.config = {
- name: "sing",
- version: "2.0.4",
- role: 0,
- credits: "Grey",
- description: "Play a song",
- aliases: ["sing"],
-cooldown: 0,
-hasPrefix: false,
-	usage: "",
-};
+const { Manager } = require("distube");
+const path = require("path");
+const fs = require("fs-extra");
+const yts = require("yt-search");
 
-module.exports.run = async ({ api, event }) => {
- const axios = require("axios");
- const fs = require("fs-extra");
- const ytdl = require("@distube/ytdl-core");
- const request = require("request");
- const yts = require("yt-search");
+const manager = new Manager({
+  updateYouTubeDL: true,
+  youtubeCookie: "",
+  requestOptions: {},
+});
 
- const input = event.body;
- const text = input.substring(12);
- const data = input.split(" ");
+module.exports = {
+  name: "sing",
+  version: "2.0.4",
+  role: 0,
+  credits: "Grey",
+  description: "Play a song",
+  aliases: ["sing"],
+  cooldown: 0,
+  hasPrefix: false,
+  usage: "",
 
- if (data.length < 2) {
-	return api.sendMessage("Please put a song", event.threadID);
- }
+  execute: async function ({ api, event }) {
+    const input = event.body;
+    const text = input.substring(12);
+    const data = input.split(" ");
 
- data.shift();
- const song = data.join(" ");
+    if (data.length < 2) {
+      return api.sendMessage("Please put a song", event.threadID);
+    }
 
- try {
-	api.sendMessage(`Finding "${song}". Please wait...`, event.threadID);
+    data.shift();
+    const song = data.join(" ");
 
-	const searchResults = await yts(song);
-	if (!searchResults.videos.length) {
-	 return api.sendMessage("Error: Invalid request.", event.threadID, event.messageID);
-	}
+    try {
+      api.sendMessage(`Finding "${song}". Please wait...`, event.threadID);
 
-	const video = searchResults.videos[0];
-	const videoUrl = video.url;
+      const searchResults = await yts(song);
+      if (!searchResults.videos.length) {
+        return api.sendMessage("Error: Invalid request.", event.threadID, event.messageID);
+      }
 
-	const stream = ytdl(videoUrl, { filter: "audioonly" });
+      const video = searchResults.videos[0];
+      const videoUrl = video.url;
 
-	const fileName = `${event.senderID}.mp3`;
-	const filePath = __dirname + `/cache/${fileName}`;
+      const fileName = `${event.senderID}.mp3`;
+      const filePath = path.join(__dirname, "cache", fileName);
 
-	stream.pipe(fs.createWriteStream(filePath));
+      const queue = manager.createQueue(event.threadID, {
+        textChannel: event.threadID,
+        member: event.senderID,
+      });
 
-	stream.on('response', () => {
-	 console.info('[DOWNLOADER]', 'Starting download now!');
-	});
+      queue.play(ytdl(videoUrl), { member: event.senderID });
 
-	stream.on('info', (info) => {
-	 console.info('[DOWNLOADER]', `Downloading ${info.videoDetails.title} by ${info.videoDetails.author.name}`);
-	});
+      queue.once("finish", () => {
+        if (fs.statSync(filePath).size > 26214400) {
+          fs.unlinkSync(filePath);
+          return api.sendMessage("[ERR] The file could not be sent because it is larger than 25MB.", event.threadID);
+        }
 
-	stream.on('end', () => {
-	 console.info('[DOWNLOADER] Downloaded');
+        const message = {
+          body: `Here's your music, enjoy!🥰\n\nTitle: ${video.title}\nArtist: ${video.author.name}`,
+          attachment: fs.createReadStream(filePath),
+        };
 
-	 if (fs.statSync(filePath).size > 26214400) {
-		fs.unlinkSync(filePath);
-		return api.sendMessage('[ERR] The file could not be sent because it is larger than 25MB.', event.threadID);
-	 }
-
-	 const message = {
-		body: `Here's your music, enjoy!🥰\n\nTitle: ${video.title}\nArtist: ${video.author.name}`,
-		attachment: fs.createReadStream(filePath)
-	 };
-
-	 api.sendMessage(message, event.threadID, () => {
-		fs.unlinkSync(filePath);
-	 });
-	});
- } catch (error) {
-	console.error('[ERROR]', error);
-	api.sendMessage('An error occurred while processing the command.', event.threadID);
- }
+        api.sendMessage(message, event.threadID, () => {
+          fs.unlinkSync(filePath);
+        });
+      });
+    } catch (error) {
+      console.error("[ERROR]", error);
+      api.sendMessage("An error occurred while processing the command.", event.threadID);
+    }
+  },
 };
