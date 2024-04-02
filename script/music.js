@@ -4,16 +4,19 @@ const ytdl = require("ytdl-core");
 const yts = require("yt-search");
 
 module.exports = {
-  name: "music",
-  version: "1.0.0",
-  role: 0,
-  hasPrefix: true,
-  aliases: ['play'],
-  usage: 'Music [prompt]',
-  description: 'Search music on YouTube',
-  credits: 'Developer',
-  cooldown: 5,
-  execute: async function({ api, event, args }) {
+  config: {
+    name: "music",
+    version: "1.0.0",
+    role: 0,
+    hasPrefix: true,
+    aliases: ['play'],
+    usage: 'Music [prompt]',
+    description: 'Search music on YouTube',
+    credits: 'Developer',
+    cooldown: 5,
+    commandCategory: "Music",
+  },
+  run: async function({ api, event, args }) {
     function byte2mb(bytes) {
       const units = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
       let l = 0, n = parseInt(bytes, 10) || 0;
