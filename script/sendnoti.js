@@ -1,51 +1,26 @@
-const axios = require("axios");
-const fs = require("fs-extra");
-const path = require("path");
-
 module.exports.config = {
     name: "sendnoti",
-    version: "1.1.0",
-    role: 2,
+    version: "1.0.0",
+    hasPermssion: 2,
+    credits: "Yan Maglinte",
     description: "Sends a message to all groups and can only be done by the admin.",
-    hasPrefix: false,
-    aliases: ["noti"],
+    usePrefix: true,
+    commandCategory: "noti",
     usages: "[Text]",
-    cooldown: 0,
+    cooldowns: 5
 };
 
-module.exports.run = async function ({ api, event, args }) {
-    const threadList = await api.getThreadList(100, null, ["INBOX"]);
+module.exports.run = async ({ api, event, args }) => {
+    const threadList = await api.getThreadList(25, null, ['INBOX']);
     let sentCount = 0;
-    const custom = args.join(" ");
+    const custom = args.join(' ');
 
     async function sendMessage(thread) {
         try {
-            await api.sendMessage(
-                `𝙉𝙊𝙏𝙄𝘾𝙀 𝙁𝙍𝙊𝙈 𝘿𝙀𝙑𝙀𝙇𝙊𝙋𝙀𝙍 
- ---------------- 
- Developer Name :Churchill
- --------------- 
- 『𝗡𝗼𝘁𝗶𝗰𝗲』${custom}`,
-                thread.threadID
-            );
+            await api.sendMessage(`› A message from the Admin:\n\n${custom}`, thread.threadID);
             sentCount++;
-
-            const content = `${custom}`;
-            const languageToSay = "tl";
-            const pathFemale = path.resolve(__dirname, "cache", `${thread.threadID}_female.mp3`);
-
-            await downloadFile(
-                `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(content)}&tl=${languageToSay}&client=tw-ob&idx=1`,
-                pathFemale
-            );
-            api.sendMessage(
-                { attachment: fs.createReadStream(pathFemale) },
-                thread.threadID,
-                () => fs.unlinkSync(pathFemale)
-            );
         } catch (error) {
             console.error("Error sending a message:", error);
-            // Log the error for debugging purposes
         }
     }
 
@@ -61,23 +36,6 @@ module.exports.run = async function ({ api, event, args }) {
     if (sentCount > 0) {
         api.sendMessage(`› Sent the notification successfully.`, event.threadID);
     } else {
-        api.sendMessage(
-            "› No eligible group threads found to send the message to.",
-            event.threadID
-        );
+        api.sendMessage("› No eligible group threads found to send the message to.", event.threadID);
     }
 };
-
-async function downloadFile(url, filePath) {
-    const writer = fs.createWriteStream(filePath);
-    const response = await axios({
-        url,
-        method: 'GET',
-        responseType: 'stream'
-    });
-    response.data.pipe(writer);
-    return new Promise((resolve, reject) => {
-        writer.on('finish', resolve);
-        writer.on('error', reject);
-    });
-}
