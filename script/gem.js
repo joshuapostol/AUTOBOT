@@ -1,11 +1,13 @@
 module.exports.config = {
-  name: "gemini",
-  hasPermission: 0,
-  credits: "Deku", //https://facebook.com/joshg101
-  description: "Talk to Gemini (conversational)",
-  usePrefix: false,
-  commandCategory: "bard",
-  version: "5.6.7"
+	name: "gemini",
+	role: 0,
+	credits: "churchill",
+	description: "Talk to Gemini (conversational)",
+	hasPrefix: false,
+	version: "5.6.7",
+	aliases: ["bard"],
+	usage: "gemini [prompt]",
+	cooldowns: 5,
 };
 
 module.exports.run = async function ({ api, event, args }) {
@@ -16,17 +18,17 @@ module.exports.run = async function ({ api, event, args }) {
 	if (!prompt) return api.sendMessage(`Please enter a prompt.`, event.threadID);
 	api.sendTypingIndicator(event.threadID);
 	try {
-		const geminiApi = `https://gemini-api.replit.app`;
+		const geminiApi = `https://joshweb.click/gemini`;
 		if (event.type == "message_reply") {
 			if (event.messageReply.attachments[0]?.type == "photo") {
 				url = encodeURIComponent(event.messageReply.attachments[0].url);
-				const res = (await axios.get(`${geminiApi}/gemini?prompt=${prompt}&url=${url}&uid=${uid}`)).data;
+				const res = (await axios.get(`${geminiApi}?prompt=${prompt}&url=${url}&uid=${uid}`)).data;
 				return api.sendMessage(res.gemini, event.threadID);
 			} else {
 				return api.sendMessage('Please reply to an image.', event.threadID);
 			}
 		}
-		const response = (await axios.get(`${geminiApi}/gemini?prompt=${prompt}&uid=${uid}`)).data;
+		const response = (await axios.get(`${geminiApi}?prompt=${prompt}&uid=${uid}`)).data;
 		return api.sendMessage(response.gemini, event.threadID);
 	} catch (error) {
 		console.error(error);
