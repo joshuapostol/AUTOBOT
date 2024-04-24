@@ -7,7 +7,7 @@ module.exports.config = {
     hasPermssion: 0,
     credits: "Churchill",//modified by joshua Apostol
     description: "EDUCATIONAL",
-    usePrefix: true,
+    usePrefix: false,
     commandCategory: "AI",
     usages: "[question]",
     cooldowns: 10
