@@ -1,1 +1,81 @@
-[]
+[
+  {
+    "userid": "100083579325213",
+    "prefix": "♡",
+    "admin": [
+      "100088690249020"
+    ],
+    "blacklist": [],
+    "enableCommands": [
+      {
+        "commands": [
+          "Women",
+          "adduser",
+          "ai",
+          "alluser",
+          "anime",
+          "antichangeinfobox",
+          "autorestart",
+          "autoseen",
+          "callad",
+          "miko",
+          "civit",
+          "claude",
+          "dalle",
+          "dalle3",
+          "emi",
+          "emojimix",
+          "god",
+          "file",
+          "filter",
+          "finger",
+          "fbdl",
+          "gemini",
+          "gen",
+          "goiadminn",
+          "gojo",
+          "help",
+          "hercai",
+          "info",
+          "insult",
+          "kick",
+          "kickall",
+          "listbox",
+          "llma",
+          "mark",
+          "mistral",
+          "obfuscate",
+          "out",
+          "pastebin",
+          "pinterest",
+          "poli",
+          "pxart",
+          "quote",
+          "recipe",
+          "replit",
+          "sendnoti",
+          "musicron",
+          "video",
+          "sim2",
+          "sim",
+          "stalk",
+          "teach",
+          "tempm",
+          "tid",
+          "trans",
+          "uid",
+          "unsend",
+          "uptime",
+          "sdxl"
+        ]
+      },
+      {
+        "handleEvent": [
+          "antiout",
+          "resend"
+        ]
+      }
+    ],
+    "time": 0
+  }
+]

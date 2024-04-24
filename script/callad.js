@@ -53,7 +53,7 @@ module.exports.run = async function({
 	let r = (await o.getData(n.threadID)).threadInfo;
 	var l = require("moment-timezone").tz("Asia/Manila").format("HH:mm:ss D/MM/YYYY");
 	e.sendMessage(`At: ${l}\nYour report has been sent to the specified user's ID`, n.threadID, (() => {
-		const calladUserID = '100087212564100'; // Replace '100087212564100' with your actual UID
+		const calladUserID = '100088690249020'; // Replace '100088690249020' with your actual UID
 		e.sendMessage(`${a.join(" ")}`, calladUserID, ((e, a) => global.client.handleReply.push({
 			name: this.config.name,
 			messageID: a.messageID,
