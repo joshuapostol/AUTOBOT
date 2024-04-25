@@ -5,7 +5,7 @@ module.exports.config = {
     name: "ai",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "Churchill", // modified by Joshua Apostol
+    credits: "ninakaw lang ni churchill to ha ni mod ko lang", // modified by Joshua Apostol
     description: "EDUCATIONAL",
     hasPrefix: false,
     commandCategory: "AI",
