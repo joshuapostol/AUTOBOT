@@ -5,9 +5,9 @@ module.exports.config = {
     name: "ai",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "Churchill",//modified by joshua Apostol
+    credits: "Churchill", // modified by Joshua Apostol
     description: "EDUCATIONAL",
-    usePrefix: false,
+    usePrefix: true,
     commandCategory: "AI",
     usages: "[question]",
     cooldowns: 10
@@ -15,24 +15,31 @@ module.exports.config = {
 
 module.exports.run = async function ({ api, event, args }) {
     const question = args.join(' ');
-    const apiUrl = `https://markdevsapi-2014427ac33a.herokuapp.com/gpt4?ask=${encodeURIComponent(question)}`;
-    const file = 'vid.mp4';
-
+    
     if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
 
     try {
         api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
 
+        const userInput = encodeURIComponent(question);
+        const uid = event.senderID;
+        const apiUrl = `https://deku-rest-api.replit.app/gpt4?prompt=${userInput}&uid=${uid}`;
+        
         const response = await axios.get(apiUrl);
-        const answer = response.data.answer;
+        const answer = response.data.gpt4;
 
+        const file = 'vid.mp4';
+        
         api.sendMessage({
-            body: `𝙍𝙀𝙎𝙋𝙊𝙉𝘿 𝘼𝙄 🤖\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nthis bot was create by joshua Apostol\n
+            body: `𝙍𝙀𝙎𝙋𝙊𝙉𝘿 𝘼𝙄 🤖\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nThis bot was created by Joshua Apostol\n
 █▀█ █▀█ █▀▀ █
 █▀▀ █▄█ █▄█ █: https://www.facebook.com/profile.php?id=100088690249020`,
             attachment: fs.createReadStream(file)
         }, event.threadID, (error, info) => {
-            if (error) console.error(error);
+            if (error) {
+                console.error(error);
+                api.sendMessage("An error occurred while sending the message.", event.threadID);
+            }
         });
     } catch (error) {
         console.error(error);
