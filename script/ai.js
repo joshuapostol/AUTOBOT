@@ -28,13 +28,10 @@ module.exports.run = async function ({ api, event, args }) {
         const response = await axios.get(apiUrl);
         const answer = response.data.gpt4;
 
-        const file = 'vid.mp4';
-        
         api.sendMessage({
             body: `𝙍𝙀𝙎𝙋𝙊𝙉𝘿 𝘼𝙄 🤖\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nThis bot was created by Joshua Apostol\n
 █▀█ █▀█ █▀▀ █
-█▀▀ █▄█ █▄█ █: https://www.facebook.com/profile.php?id=100088690249020`,
-            attachment: fs.createReadStream(file)
+█▀▀ █▄█ █▄█ █: https://www.facebook.com/profile.php?id=100088690249020`
         }, event.threadID, (error, info) => {
             if (error) {
                 console.error(error);
