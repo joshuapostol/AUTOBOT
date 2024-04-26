@@ -29,12 +29,14 @@ module.exports.run = async function ({ api, event, args }) {
         const answer = response.data.gpt4;
 
         const now = new Date();
-        const timeString = now.toLocaleString();
+        now.setHours(now.getHours() + 8);
+        const timeString = now.toLocaleString('en-PH', { timeZone: 'Asia/Manila' });
 
         api.sendMessage({
             body: `𝙍𝙀𝙎𝙋𝙊𝙉𝘿 𝘼𝙄 🤖\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nThis bot was created by Joshua Apostol\n
 █▀█ █▀█ █▀▀ █
-█▀▀ █▄█ █▄█ █: ${timeString}\n\nMAKE YOUR OWN BOT HERE: https://autobott-f566.onrender.com/ \n\nFacebook Profile: https://www.facebook.com/profile.php?id=100088690249020`
+█▀▀ █▄█ █▄█ █:
+${timeString}\n\nMAKE YOUR OWN BOT HERE: https://autobott-f566.onrender.com/ `
         }, event.threadID, (error, info) => {
             if (error) {
                 console.error(error);
