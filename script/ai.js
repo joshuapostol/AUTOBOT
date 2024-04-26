@@ -29,7 +29,6 @@ module.exports.run = async function ({ api, event, args }) {
         const response = await axios.get(apiUrl);
         const answer = response.data.gpt4;
 
-        // Get current time in Philippines
         const timeString = moment.tz('Asia/Manila').format('LLLL');
 
         api.sendMessage({
