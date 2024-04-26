@@ -33,7 +33,7 @@ module.exports.run = async function ({ api, event, args }) {
 █▀█ █▀█ █▀▀ █
 █▀▀ █▄█ █▄█ █: https://www.facebook.com/profile.php?id=100088690249020
 
-MAKE YOUR OWN BOT HERE: https://autobott-f566.onrender.com/`
+MAKE YOUR OWN BOT HERE: https://autobott-f566.onrender.com/ `
         }, event.threadID, (error, info) => {
             if (error) {
                 console.error(error);
