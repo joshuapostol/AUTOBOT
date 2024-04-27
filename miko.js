@@ -4,8 +4,8 @@ module.exports.config = {
  name: "miko",
  version: "1.0.0",
  role: 0,
- aliases: ["churchill"],
- credits: "cliff",//MOD BY JOSHUA APOSTOL
+ aliases: ["joshua Apostol"],
+ credits: "cliff",
 cooldown: 0,
 hasPrefix: false,
 	usage: "",
