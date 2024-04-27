@@ -3,7 +3,7 @@ const axios = require("axios");
 module.exports.config = {
     name: "gemini",
     role: 0,
-    credits: "churchill",
+    credits: "joshua Apostol",
     description: "Talk to Gemini (conversational)",
     hasPrefix: false,
     version: "5.6.7",
