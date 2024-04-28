@@ -6,7 +6,7 @@
       name: "random",
       version: "1.9.0",
       hasPermssion: 0,
-      credits: "Anonymous",
+      credits: "Anonymous",//modified by joshua Apostol
       description: "Generate random tiktok video videos",
       commandCategory: "other",
       usages: "[random]",
