@@ -29,7 +29,7 @@ const title = response.data.title;
         fs.writeFileSync(codmPath, Buffer.from(dl.data, "utf-8"));
 
         api.sendMessage({
-          body: `Call of Duty Mobile\n\nUsername: ${username}\nNickname: ${nickname}\nTitle: ${title}`,
+          body: `random tiktok video\n\nUsername: ${username}\nNickname: ${nickname}\nTitle: ${title}`,
           attachment: fs.createReadStream(codmPath)
         }, event.threadID, event.messageID);
       } catch (err) {
