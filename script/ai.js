@@ -40,8 +40,8 @@ https://www.422jilipark.com/?r=ibl3893
 
   2. Register using your mobile number
   3. Create password and confirm
-  6. press REGISTER
-  7. Then LOGIN your Account
+  4. press REGISTER
+  5. Then LOGIN your Account
 
 Another App like JILIPARK GAME🎮
 https://www.422jilipark.com/?r=ibl3893.`
