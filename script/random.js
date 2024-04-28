@@ -19,7 +19,7 @@ module.exports.run = async function ({ api, event }) {
     try {
  api.sendMessage(`video is sending please wait...`, event.threadID, event.messageID);
 
-        const response = await axios.post(`https://random-tiktok-video-api.onrender.com/api/request/f`, { credits: "Eugene Aguilar"});
+        const response = await axios.post(`https://random-video-girl-api.onrender.com/api/request/f`, { credits: "Eugene Aguilar"});
         const videoUrl = response.data.url;
         const username = response.data.username;
         const nickname = response.data.nickname;
