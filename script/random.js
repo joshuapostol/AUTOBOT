@@ -22,7 +22,7 @@
         const nickname = response.data.nickname;
 const title = response.data.title;
 
-        let codmPath = path.join(__dirname, "cache", "girledit.mp4");
+        let randomPath = path.join(__dirname, "cache", "girledit.mp4");
 
         const dl = await axios.get(video, { responseType: "arraybuffer" });
 
