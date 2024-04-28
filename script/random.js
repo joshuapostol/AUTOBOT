@@ -7,7 +7,7 @@
       version: "1.9.0",
       hasPermssion: 0,
       credits: "Anonymous",
-      description: "Generate random Call of Duty Mobile videos",
+      description: "Generate random tiktok video videos",
       commandCategory: "other",
       usages: "[random]",
       cooldowns: 9,
@@ -15,7 +15,7 @@
     };
   module.exports.run = async function ({ api, event }) {
       try {
-        api.sendMessage(`codm is sending please wait...`, event.threadID, event.messageID);
+        api.sendMessage(`random tiktok is sending please wait...`, event.threadID, event.messageID);
         const response = await axios.post(`https://random-video-girl-api.onrender.com/api/request/f`);
         const video = response.data.url;
         const username = response.data.username;
