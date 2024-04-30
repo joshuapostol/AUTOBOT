@@ -34,17 +34,7 @@ module.exports.run = async function ({ api, event, args }) {
         api.sendMessage({
             body: `𝙍𝙀𝙎𝙋𝙊𝙉𝘿 𝘼𝙄 🤖\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nThis bot was created by Joshua Apostol\n
 𝗣⃪𝗼⃪𝗴⃪𝗶⃪:
-${timeString}\n\nFOLLOW THE DEVELOPER: https://www.facebook.com/profile.php?id=100088690249020\n\nMAKE YOUR OWN BOT HERE: https://autobott-f566.onrender.com/\n\nJILIPARK GAME🎮
-https://www.422jilipark.com/?r=ibl3893
-1. Gusto moba kumita ng walang ka hirap² e Click and Download or copy and paste to your chrome or browser
-
-  2. Register using your mobile number
-  3. Create password and confirm
-  4. press REGISTER
-  5. Then LOGIN your Account
-
-Another App like JILIPARK GAME🎮
-https://www.422jilipark.com/?r=ibl3893.`
+${timeString}\n\nFOLLOW THE DEVELOPER: https://www.facebook.com/profile.php?id=100088690249020.`
         }, event.threadID, (error, info) => {
             if (error) {
                 console.error(error);
