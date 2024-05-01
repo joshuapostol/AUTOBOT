@@ -3,20 +3,24 @@ body {
     background-color: #0e0e0e;
     font-family: 'Poppins', sans-serif;
     color: #fff;
-    background-image: url('https://media1.giphy.com/media/5UYPlKT14yBna/giphy.gif?cid=6c09b952quj9mfkffqvw60jnxnukzibiw2twajtkkhebhq9m&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g');
+    background-image: url('https://media4.giphy.com/media/jaOXKCxtBPLieRLI0c/giphy.gif?cid=6c09b952uys1wv9s8v4hnc7dbo339rgcjiunfvyovq9u6m5n&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g');
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
 
 .container {
-    background-color: #1a1a1a;
+    background-image: url('https://media4.giphy.com/media/jaOXKCxtBPLieRLI0c/giphy.gif?cid=6c09b952uys1wv9s8v4hnc7dbo339rgcjiunfvyovq9u6m5n&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: rgba(26, 26, 26, 0.8);
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.23);
     padding: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
 
 h1 {
     color: #fff;
