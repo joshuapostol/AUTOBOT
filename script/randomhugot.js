@@ -3,17 +3,17 @@ const axios = require('axios');
 module.exports = {
     name: 'randomhugot',
     version: '1.0.0',
-    author: 'joshua Apostol,
+    author: 'joshua Apostol',
     description: 'Get a random hugot quote',
     permissions: {
-        '*': '2'
+        '*': '1'
     },
     cooldown: 5,
     dependencies: {
         'axios': ''
     },
 
-    execute: async ({ api, event }) => {
+    execute: async function(args, api, event) {
         try {
             api.sendMessage('⏱️ | Fetching random hugot quote. Please wait...', event.threadID, event.messageID);
 
