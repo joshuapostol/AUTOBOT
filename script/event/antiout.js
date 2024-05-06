@@ -13,7 +13,7 @@ module.exports.handleEvent = async ({
     const {
       name
     } = info[event.logMessageData?.leftParticipantFbId];
-    api.sendMessage(`wahhh! Di ka makakatakas`, event.threadID);
+    api.sendMessage(`Yawa nag leave ang buang`, event.threadID);
     api.addUserToGroup(event.logMessageData?.leftParticipantFbId, event.threadID, (error) => {
       if (error) {
         api.sendMessage(`Unable to re-add member ${name} to the group!`, event.threadID);
