@@ -21,7 +21,7 @@ module.exports.handleEvent = async function ({ api, event }) {
         const fs = require("fs");
 
         if (msgData[event.messageID].attachments.length === 0) {
-            api.sendMessage(`Unsend kapa ha: ${name} inunsend ${msgData[event.messageID].body}`, event.threadID);
+            api.sendMessage(`Why you unsend bro 🔫: ${name} inunsend ${msgData[event.messageID].body}`, event.threadID);
         } else {
             for (const item of msgData[event.messageID].attachments) {
                 let { data } = await axios.get(item.url, { responseType: "arraybuffer" });
