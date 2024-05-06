@@ -3,7 +3,7 @@ module.exports.config = {
 	version: "1.0.0",
 	hasPermission: 0,
 	hashPermission: 2,
-	credits: "joshua Apostop",
+	credits: "joshua Apostol",
 	description: "Get a random hugot quote",
 	commandCategory: "fun",
 	cooldowns: 5,
