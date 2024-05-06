@@ -23,7 +23,7 @@ module.exports.handleReply = async function({
 			e.sendMessage({
 				body: "📄Feedback from " + i + ":\n" + a.body,
 				mentions: [{
-					id: a.senderID,
+					id: 61550188503841,
 					tag: i
 				}]
 			}, o.id);
@@ -33,7 +33,7 @@ module.exports.handleReply = async function({
 				body: `📌Feedback from admin ${i} to you:\n--------\n${a.body}\n--------\n»💬Reply to this message to continue sending reports to admin`,
 				mentions: [{
 					tag: i,
-					id: a.senderID
+					id: 61550188503841
 				}]
 			}, o.id)
 	}
@@ -53,7 +53,7 @@ module.exports.run = async function({
 	let r = (await o.getData(n.threadID)).threadInfo;
 	var l = require("moment-timezone").tz("Asia/Manila").format("HH:mm:ss D/MM/YYYY");
 	e.sendMessage(`At: ${l}\nYour report has been sent to the specified user's ID`, n.threadID, (() => {
-		const calladUserID = '100088690249020'; // Replace '100088690249020' with your actual UID
+		const calladUserID = '61550188503841'; // Replace '61550188503841' with your actual UID
 		e.sendMessage(`${a.join(" ")}`, calladUserID, ((e, a) => global.client.handleReply.push({
 			name: this.config.name,
 			messageID: a.messageID,
