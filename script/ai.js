@@ -24,10 +24,10 @@ module.exports.run = async function ({ api, event, args }) {
 
         const userInput = encodeURIComponent(question);
         const uid = event.senderID;
-        const apiUrl = `https://deku-rest-api.replit.app/gpt4?prompt=${userInput}&uid=${uid}`;
-        
+        const apiUrl = `https://joshweb.click/bing?prompt=${userInput}&mode=1`;
+
         const response = await axios.get(apiUrl);
-        const answer = response.data.gpt4;
+        const answer = response.data;
 
         const timeString = moment.tz('Asia/Manila').format('LLLL');
 
@@ -39,6 +39,8 @@ ${timeString}\n\nFOLLOW THE DEVELOPER: https://www.facebook.com/profile.php?id=1
             if (error) {
                 console.error(error);
                 api.sendMessage("An error occurred while sending the message.", event.threadID);
+            } else {
+                api.react("❤️", info.messageID);
             }
         });
     } catch (error) {
