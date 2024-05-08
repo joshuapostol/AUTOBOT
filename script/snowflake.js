@@ -34,18 +34,15 @@ module.exports.run = async function({ api, event, args }) {
 		const answer = response.data.answer;
 		const question = input;
 		
-		const questionBox = "```" + `
+		const message = `
 			💭 Question:
 			${question}
-		` + "```";
-		
-		const answerBox = "```" + `
+
 			💡 Answer:
 			${answer}
-		` + "```";
+		`;
 		
-		api.sendMessage(questionBox, event.threadID);
-		api.sendMessage(answerBox, event.threadID);
+		api.sendMessage("```" + message + "```", event.threadID);
 	} else {
 		api.sendMessage("Failed to get a response.", event.threadID);
 	}
