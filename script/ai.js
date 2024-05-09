@@ -9,7 +9,7 @@ module.exports.config = {
   aliases: ['snow', 'ai3'],
   description: "An AI command powered by Snowflakes AI",
   usage: "snowflakes [prompt]",
-  credits: 'churchill',
+  credits: 'churchill',//modified by joshua Apostol
   cooldown: 3,
 };
  
