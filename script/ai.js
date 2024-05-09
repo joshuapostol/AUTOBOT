@@ -22,7 +22,7 @@ module.exports.run = async function ({ api, event, args }) {
     try {
         api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
 
-        const apiUrl = `https://joshweb.click/new/gpt-4_adv?prompt=hi`;
+        const apiUrl = `https://joshweb.click/new/gpt-4_adv?prompt=`;
 
         const response = await axios.get(apiUrl);
         const answer = response.data.data; // Updated this line to access the actual answer
