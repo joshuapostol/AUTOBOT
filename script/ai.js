@@ -2,11 +2,11 @@ const axios = require('axios');
 const moment = require('moment-timezone');
 
 module.exports.config = {
-  name: 'ai3',
+  name: 'ai',
   version: '1.0.0',
   role: 0,
   hasPrefix: false,
-  aliases: ['snow', 'ai3'],
+  aliases: ['snow', 'ai'],
   description: "An AI command powered by Snowflakes AI",
   usage: "snowflakes [prompt]",
   credits: 'churchill',//modified by joshua Apostol
