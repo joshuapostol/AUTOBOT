@@ -28,7 +28,7 @@ module.exports.run = async function({ api, event, args }) {
   try {
     const { data } = await axios.get(`https://hashier-api-snowflake.vercel.app/api/snowflake?ask=${encodeURIComponent(input)}`);
     if (data.response) {
-      api.sendMessage(`𝗥⃪𝗘⃪𝗦⃪𝗣⃪𝗢⃪𝗡⃪𝗗⃪ 𝗔⃪𝗜⃪\n\n━━━━━━━━━━━━━━━\n\n${data.response}\n\nAsked by: ${senderName}\n${timeString}\n\n𝒄𝒓𝒆𝒅𝒊𝒕𝒔: https://www.facebook.com/Churchill.Dev4100`, event.threadID, event.messageID);
+      api.sendMessage(`𝗥⃪𝗘⃪𝗦⃪𝗣⃪𝗢⃪𝗡⃪𝗗⃪ 𝗔⃪𝗜⃪\n\n━━━━━━━━━━━━━━━\n\n${data.response}\n\n🗣Asked by: ${senderName}\n${timeString}\n\n𝒄𝒓𝒆𝒅𝒊𝒕𝒔: https://www.facebook.com/Churchill.Dev4100`, event.threadID, event.messageID);
     } else {
       api.sendMessage('No response found.', event.threadID, event.messageID);
     }
