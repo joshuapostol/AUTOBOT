@@ -22,9 +22,7 @@ module.exports.run = async function ({ api, event, args }) {
     try {
         api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
 
-        const userInput = encodeURIComponent(question);
-        const uid = event.senderID;
-        const apiUrl = `https://joshweb.click/bing?prompt=${userInput}&mode=1`;
+        const apiUrl = `https://joshweb.click/new/gpt-4_adv?prompt=${encodeURIComponent(question)}`;
 
         const response = await axios.get(apiUrl);
         const answer = response.data;
@@ -40,7 +38,7 @@ ${timeString}\n\nFOLLOW THE DEVELOPER: https://www.facebook.com/profile.php?id=1
                 console.error(error);
                 api.sendMessage("An error occurred while sending the message.", event.threadID);
             } else {
-                api.react("❤️", info.messageID);
+                api.react("❤️‍🩹", info.messageID);
             }
         });
     } catch (error) {
