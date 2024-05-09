@@ -2,44 +2,36 @@ const axios = require('axios');
 const moment = require('moment-timezone');
 
 module.exports.config = {
-    name: "ai",
-    version: "1.0.0",
-    hasPermssion: 0,
-    credits: "ninakaw lang ni churchill to ha ni mod ko lang", // modified by Joshua Apostol
-    description: "EDUCATIONAL",
-    hasPrefix: false,
-    commandCategory: "AI",
-    usages: "[question]",
-    cooldowns: 10
+  name: 'ai3',
+  version: '1.0.0',
+  role: 0,
+  hasPrefix: false,
+  aliases: ['snow', 'ai3'],
+  description: "An AI command powered by Snowflakes AI",
+  usage: "snowflakes [prompt]",
+  credits: 'churchill,modified by joshua Apostol',
+  cooldown: 3,
 };
-
-module.exports.run = async function ({ api, event, args }) {
-    const question = args.join(' ');
-
-    if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
-
-    try {
-        api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
-
-        const apiUrl = `https://markdevs-last-api.onrender.com/gpt4?prompt=&uid=`;
-
-        const response = await axios.get(apiUrl);
-        const answer = response.data;
-
-        const timeString = moment.tz('Asia/Manila').format('LLLL');
-
-        api.sendMessage({
-            body: `𝙍𝙀𝙎𝙋𝙊𝙉𝘿 𝘼𝙄 🤖\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nThis bot was created by Joshua Apostol\n𝗣⃪𝗼⃪𝗴⃪𝗶⃪:${timeString}\n\nFOLLOW THE DEVELOPER: https://www.facebook.com/profile.php?id=100088690249020\n\nMAKE YOUR OWN BOT HERE: https://autobot-4af1.onrender.com/.`
-        }, event.threadID, (error, info) => {
-            if (error) {
-                console.error(error);
-                api.sendMessage("An error occurred while sending the message.", event.threadID);
-            } else {
-                api.react("🤖", info.messageID);
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        api.sendMessage("An error occurred while processing your request.", event.threadID);
+ 
+module.exports.run = async function({ api, event, args }) {
+  const input = args.join(' ');
+  const timeString = moment.tz('Asia/Manila').format('LLL');
+ 
+  if (!input) {
+    api.sendMessage(`𝞒𝞢𝙎𝞠𝞗𝞟𝘿 𝞓𝞘\n\nPlease provide a question/query.`, event.threadID, event.messageID);
+    return;
+  }
+ 
+  api.sendMessage(`🔍Searching for Snowflakes AI response....`, event.threadID, event.messageID);
+ 
+  try {
+    const { data } = await axios.get(`https://hashier-api-snowflake.vercel.app/api/snowflake?ask=${encodeURIComponent(input)}`);
+    if (data.response) {
+      api.sendMessage(`𝞒𝞢𝙎𝞠𝞗𝞟𝘿 𝞓𝞘\n\n━━━━━━━━━━━━━━━\n\n${data.response}\n\n${timeString}\n\n𝒄𝒓𝒆𝒅𝒊𝒕𝒔: https://www.facebook.com/profile.php?id=100088690249020`, event.threadID, event.messageID);
+    } else {
+      api.sendMessage('No response found.', event.threadID, event.messageID);
     }
+  } catch (error) {
+    api.sendMessage('An error occurred while processing your request.', event.threadID, event.messageID);
+  }
 };
