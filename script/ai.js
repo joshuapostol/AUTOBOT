@@ -1,48 +1,29 @@
 const axios = require('axios');
-const fs = require('fs');
-const moment = require('moment-timezone');
-
 module.exports.config = {
-    name: "ai",
-    version: "1.0.0",
-    hasPermssion: 0,
-    credits: "ninakaw lang ni churchill to ha ni mod ko lang", // modified by Joshua Apostol
-    description: "EDUCATIONAL",
-    hasPrefix: false,
-    commandCategory: "AI",
-    usages: "[question]",
-    cooldowns: 10
+  name: 'ai',
+  version: '1.0.0',
+  role: 0,
+  hasPrefix: true,
+  description: "To chat deku AI",
+  usage: "deku [prompt]",
+  credits: 'joshua Apoatol', // Cmd created, API by Joshua Sy
+  cooldown: 2,
 };
-
-module.exports.run = async function ({ api, event, args }) {
-    const question = args.join(' ');
-    
-    if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
-
+module.exports.run = async function({
+  api,
+  event,
+  args
+}) {
     try {
-        api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
-
-        const apiUrl = `https://joshweb.click/new/gpt-4_adv?prompt=${encodeURIComponent(question)}`;
-
-        const response = await axios.get(apiUrl);
-        const answer = response.data;
-
-        const timeString = moment.tz('Asia/Manila').format('LLLL');
-
-        api.sendMessage({
-            body: `𝙍𝙀𝙎𝙋𝙊𝙉𝘿 𝘼𝙄 🤖\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nThis bot was created by Joshua Apostol\n
-𝗣⃪𝗼⃪𝗴⃪𝗶⃪:
-${timeString}\n\nFOLLOW THE DEVELOPER: https://www.facebook.com/profile.php?id=100088690249020\n\nMAKE YOUR OWN BOT HERE: https://autobot-4af1.onrender.com/.`
-        }, event.threadID, (error, info) => {
-            if (error) {
-                console.error(error);
-                api.sendMessage("An error occurred while sending the message.", event.threadID);
-            } else {
-                api.react("❤️‍🩹", info.messageID);
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        api.sendMessage("An error occurred while processing your request.", event.threadID);
-    }
+            const prompt = encodeURIComponent(args.join(" "));
+            if (!prompt) return api.sendMessage("🤖 Please enter a prompt!!!", event.threadID, event.messageID);
+            api.sendMessage("🤖 Deku AI is processing your question...", event.threadID, event.messageID);
+            const apiUrl = "https://joshweb.click/new/gpt-4_adv?prompt=hi";
+            const response = await axios.get(apiUrl + prompt);
+            const responseData = response.data.data;
+            return api.sendMessage(`🤖: ${responseData}\n\n\nThis bot was created on PROJECT BOTIFY by Neth.`, event.threadID, event.messageID);
+        } catch (error) {
+            console.error(error);
+            return api.sendMessage(error.message, event.threadID, event.messageID);
+        }
 };
