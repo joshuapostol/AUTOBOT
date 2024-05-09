@@ -2,20 +2,21 @@ const axios = require('axios');
 const moment = require('moment-timezone');
 
 module.exports.config = {
-  name: 'ai3',
+  name: 'ai',
   version: '1.0.0',
   role: 0,
   hasPrefix: false,
   aliases: ['snow', 'ai3'],
   description: "An AI command powered by Snowflakes AI",
   usage: "snowflakes [prompt]",
-  credits: 'churchill,modified by joshua Apostol',
+  credits: 'churchill,modofied by joshua Apostol',
   cooldown: 3,
 };
  
 module.exports.run = async function({ api, event, args }) {
   const input = args.join(' ');
   const timeString = moment.tz('Asia/Manila').format('LLL');
+  const senderName = event.senderName;
  
   if (!input) {
     api.sendMessage(`𝞒𝞢𝙎𝞠𝞗𝞟𝘿 𝞓𝞘\n\nPlease provide a question/query.`, event.threadID, event.messageID);
@@ -27,7 +28,7 @@ module.exports.run = async function({ api, event, args }) {
   try {
     const { data } = await axios.get(`https://hashier-api-snowflake.vercel.app/api/snowflake?ask=${encodeURIComponent(input)}`);
     if (data.response) {
-      api.sendMessage(`𝞒𝞢𝙎𝞠𝞗𝞟𝘿 𝞓𝞘\n\n━━━━━━━━━━━━━━━\n\n${data.response}\n\n${timeString}\n\n𝒄𝒓𝒆𝒅𝒊𝒕𝒔: https://www.facebook.com/profile.php?id=100088690249020`, event.threadID, event.messageID);
+      api.sendMessage(`𝞒𝞢𝙎𝞠𝞗𝞟𝘿 𝞓𝞘\n\n━━━━━━━━━━━━━━━\n\n${data.response}\n\nAsked by: ${senderName}\n${timeString}\n\n𝒄𝒓𝒆𝒅𝒊𝒕𝒔: https://www.facebook.com/Churchill.Dev4100`, event.threadID, event.messageID);
     } else {
       api.sendMessage('No response found.', event.threadID, event.messageID);
     }
