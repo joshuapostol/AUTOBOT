@@ -6,6 +6,7 @@ module.exports.config = {
     description: "imgur upload",
     commandCategory: "imgur",
     usages: "[reply to image]",
+    hasPrefix: true,
     cooldowns: 5,
     dependencies: {
         "axios": ""
