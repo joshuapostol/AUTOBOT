@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const axios = require('axios');
 const fs = require('fs');
 const moment = require('moment-timezone');
 
@@ -22,13 +22,10 @@ module.exports.run = async function ({ api, event, args }) {
     try {
         api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
 
-        const userInput = encodeURIComponent(question);
-        const uid = event.senderID;
-        const apiUrl = `https://boxgptapi.replit.app/api/chatgpt?msg=${userInput}`;
+        const apiUrl = `https://boxgptapi.replit.app/api/chatgpt?msg=${encodeURIComponent(question)}`;
 
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        const answer = data.reply;
+        const response = await axios.get(apiUrl);
+        const answer = response.data.reply;
 
         const timeString = moment.tz('Asia/Manila').format('LLLL');
 
