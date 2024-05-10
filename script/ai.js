@@ -22,7 +22,7 @@ module.exports.run = async function ({ api, event, args }) {
     try {
         api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
 
-        const apiUrl = `https://boxgptapi.replit.app/api/chatgpt?msg=${encodeURIComponent(question)}`;
+        const apiUrl = `https://boxgptapi.replit.app/api/chatgpt?msg=`;
 
         const response = await axios.get(apiUrl);
         const answer = response.data.reply;
