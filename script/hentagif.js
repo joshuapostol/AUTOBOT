@@ -1,37 +1,37 @@
 module.exports.config = {
-    name: "hentagif",
+    name: "randomgif",
     version: "1.0.0",
+    hasPrefix: true,
     hasPermission: 0,
-    credits: "joshua apostol",
+    credits: "Joshua Apostol",
     description: "Get a random gif",
     commandCategory: "media",
     cooldowns: 5,
-    hasPrefix: true,
     dependencies: {
-        "node-fetch": ""
+        "axios": ""
     }
 };
 
-const fetch = require("node-fetch");
+const axios = require("axios");
 const fs = require("fs");
 
 module.exports.run = async function({ api, event, args, client }) {
     try {
         api.sendMessage("⏱️ | Fetching random gif. Please wait...", event.threadID, event.messageID);
         
-        const response = await fetch('https://hentagif-api.onrender.com/random-gif');
-        const gifData = await response.json();
+        const response = await axios.get('https://hentagif-api.onrender.com/random-gif');
+        const gifData = response.data;
 
         if (gifData && gifData.url) {
             const filePath = __dirname + "/cache/random.gif";
             const gifStream = fs.createWriteStream(filePath);
 
+            const gifResponse = await axios.get(gifData.url, { responseType: 'stream' });
+            gifResponse.data.pipe(gifStream);
+
             await new Promise((resolve, reject) => {
                 gifStream.on('finish', resolve);
                 gifStream.on('error', reject);
-                fetch(gifData.url).then(response => {
-                    response.body.pipe(gifStream);
-                });
             });
 
             api.sendMessage({
