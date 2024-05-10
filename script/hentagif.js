@@ -1,5 +1,5 @@
 module.exports.config = {
-    name: "randomgif",
+    name: "hentagif",
     version: "1.0.0",
     hasPrefix: true,
     hasPermission: 0,
