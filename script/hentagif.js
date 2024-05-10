@@ -2,7 +2,7 @@ module.exports.config = {
     name: "hentagif",
     version: "1.0.0",
     hasPermission: 0,
-    credits: "joshua Apostol",
+    credits: "joshua apostol",
     description: "Get a random gif",
     commandCategory: "media",
     cooldowns: 5,
@@ -46,4 +46,3 @@ module.exports.run = async function({ api, event, args, client }) {
         api.sendMessage("Error fetching gif.", event.threadID, event.messageID);
     }
 };
-
