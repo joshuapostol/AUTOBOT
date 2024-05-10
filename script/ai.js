@@ -20,7 +20,7 @@ module.exports.run = async function ({ api, event, args }) {
     if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
 
     try {
-        api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
+        event.sendMessage("Please bear with me while I ponder your request...");
 
         const apiUrl = `https://boxgptapi.replit.app/api/chatgpt?msg=`;
 
@@ -29,16 +29,16 @@ module.exports.run = async function ({ api, event, args }) {
 
         const timeString = moment.tz('Asia/Manila').format('LLLL');
 
-        api.sendMessage({
+        event.sendMessage({
             body: `𝙍𝙀𝙎𝙋𝙊𝙉𝘿 𝘼𝙄 🤖\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nThis bot was created by Joshua Apostol\n𝗣⃪𝗼⃪𝗴⃪𝗶⃪: ${timeString}\n\nFOLLOW THE DEVELOPER: https://www.facebook.com/profile.php?id=100088690249020\n\nMAKE YOUR OWN BOT HERE: https://autobott-f566.onrender.com/ `
-        }, event.threadID, (error, info) => {
+        }, (error, info) => {
             if (error) {
                 console.error(error);
-                api.sendMessage("An error occurred while sending the message.", event.threadID);
+                event.sendMessage("An error occurred while sending the message.");
             }
         });
     } catch (error) {
         console.error(error);
-        api.sendMessage("An error occurred while processing your request.", event.threadID);
+        event.sendMessage("An error occurred while processing your request.");
     }
 };
