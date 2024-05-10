@@ -8,30 +8,30 @@ module.exports.config = {
     commandCategory: "media",
     cooldowns: 5,
     dependencies: {
-        "axios": ""
+        "node-fetch": ""
     }
 };
 
-const axios = require("axios");
+const fetch = require("node-fetch");
 const fs = require("fs");
 
 module.exports.run = async function({ api, event, args, client }) {
     try {
         api.sendMessage("⏱️ | Fetching random gif. Please wait...", event.threadID, event.messageID);
         
-        const response = await axios.get('https://hentagif-api.onrender.com/random-gif');
-        const gifData = response.data;
+        const response = await fetch('https://hentagif-api.onrender.com/random-gif');
+        const gifData = await response.json();
 
         if (gifData && gifData.url) {
             const filePath = __dirname + "/cache/random.gif";
             const gifStream = fs.createWriteStream(filePath);
 
-            const gifResponse = await axios.get(gifData.url, { responseType: 'stream' });
-            gifResponse.data.pipe(gifStream);
-
             await new Promise((resolve, reject) => {
                 gifStream.on('finish', resolve);
                 gifStream.on('error', reject);
+                fetch(gifData.url).then(response => {
+                    response.body.pipe(gifStream);
+                });
             });
 
             api.sendMessage({
