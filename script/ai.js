@@ -1,5 +1,4 @@
 const axios = require('axios');
-const fs = require('fs');
 const moment = require('moment-timezone');
 
 module.exports.config = {
@@ -20,25 +19,25 @@ module.exports.run = async function ({ api, event, args }) {
     if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
 
     try {
-        event.sendMessage("Please bear with me while I ponder your request...");
+        api.sendMessage("Please bear with me while I ponder your request...", event.threadID, event.messageID);
 
-        const apiUrl = `https://boxgptapi.replit.app/api/chatgpt?msg=`;
+        const apiUrl = `https://boxgptapi.replit.app/api/chatgpt`;
 
-        const response = await axios.get(apiUrl);
+        const response = await axios.post(apiUrl, { msg: question });
         const answer = response.data.reply;
 
         const timeString = moment.tz('Asia/Manila').format('LLLL');
 
-        event.sendMessage({
+        api.sendMessage({
             body: `𝙍𝙀𝙎𝙋𝙊𝙉𝘿 𝘼𝙄 🤖\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\nThis bot was created by Joshua Apostol\n𝗣⃪𝗼⃪𝗴⃪𝗶⃪: ${timeString}\n\nFOLLOW THE DEVELOPER: https://www.facebook.com/profile.php?id=100088690249020\n\nMAKE YOUR OWN BOT HERE: https://autobott-f566.onrender.com/ `
-        }, (error, info) => {
+        }, event.threadID, (error, info) => {
             if (error) {
                 console.error(error);
-                event.sendMessage("An error occurred while sending the message.");
+                api.sendMessage("An error occurred while sending the message.", event.threadID);
             }
         });
     } catch (error) {
         console.error(error);
-        event.sendMessage("An error occurred while processing your request.");
+        api.sendMessage("An error occurred while processing your request.", event.threadID);
     }
 };
