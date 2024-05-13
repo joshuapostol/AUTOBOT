@@ -6,7 +6,7 @@ module.exports.config = {
     name: "ai",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "ninakaw lang ni churchill to ha ni mod ko lang", // modified by Joshua Apostol
+    credits: "Joshua Apostol",
     description: "EDUCATIONAL",
     hasPrefix: false,
     commandCategory: "AI",
@@ -27,8 +27,10 @@ module.exports.run = async function ({ api, event, args }) {
         const apiUrl = `https://hashier-api-globalgpt.vercel.app/api/globalgpt?q=${userInput}&uid=${uid}`;
  
         const response = await axios.get(apiUrl);
-        const answer = response.data.gpt4;
+        console.log(response.data); // Log the response data structure
  
+        const answer = response.data.answer; // Assuming the answer is in the 'answer' field
+        
         const timeString = moment.tz('Asia/Manila').format('LLLL');
  
         api.sendMessage({
